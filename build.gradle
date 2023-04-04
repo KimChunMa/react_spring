@@ -31,7 +31,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok' //룸복
     testImplementation 'org.springframework.boot:spring-boot-starter-test' // 스프링부트 테스터
     runtimeOnly 'com.mysql:mysql-connector-j' // sql
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA [application.properties] 필수
 }
 
 tasks.named('test') {
