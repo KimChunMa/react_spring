@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor @NoArgsConstructor @Builder
 public class NoteDto {
     private int nno;
-    private String ncontent;
+    private String ncontents;
 
     // dto --> entity [서비스에서 사용]
     public NoteEntity toEntity( ){
         return NoteEntity.builder()
                 .nno(this.nno)
-                .ncontent(this.ncontent)
+                .ncontents(this.ncontents)
                 .build();
     }
 

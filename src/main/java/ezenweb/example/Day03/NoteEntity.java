@@ -19,13 +19,13 @@ public class NoteEntity {
     private int nno;
 
     @Column
-    private String ncontent;
+    private String ncontents;
 
     //entity --> dto [서비스에서 사용]
     public NoteDto toDto(  ){
         return NoteDto.builder()
                 .nno(this.nno)
-                .ncontent(this.ncontent)
+                .ncontents(this.ncontents)
                 .build();
     }
 }

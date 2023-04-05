@@ -75,7 +75,7 @@ public class NoteService {
         if(optionalNoteEntity.isPresent()){
             NoteEntity noteEntity = optionalNoteEntity.get(); //엔티티 객체 꺼내기
 
-            noteEntity.setNcontent(dto.getNcontent()); //변경하기
+            noteEntity.setNcontents(dto.getNcontents()); //변경하기
 
             return true;
         }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 @RestController //  // @ResponseBody + @Controller MVC Controller
 @Slf4j // 로그
-@RequestMapping("/note") // 공통 URL
+@RequestMapping("/notes") // 공통 URL
 public class NoteController {
     @Autowired // 생성자 자동 주입 [단 스프링컨테이너에 등록이 된 경우만]
     NoteService noteService;
