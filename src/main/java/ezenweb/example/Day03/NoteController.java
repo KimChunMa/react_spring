@@ -2,16 +2,26 @@ package ezenweb.example.Day03;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
 @RestController //  // @ResponseBody + @Controller MVC Controller
 @Slf4j // 로그
-@RequestMapping("/notes") // 공통 URL
+@RequestMapping("/note") // 공통 URL
 public class NoteController {
     @Autowired // 생성자 자동 주입 [단 스프링컨테이너에 등록이 된 경우만]
     NoteService noteService;
+    //------------------------------- HTML 반환 --------------------------
+    @GetMapping("")
+    public Resource index(){
+        return new ClassPathResource("templates/note.html");
+    }
+
+
+
     // ----------------------------- RESTful API -----------------------------
     //1. 쓰기
     @PostMapping("/write") //http://localhost:8080/note/write
@@ -31,7 +41,7 @@ public class NoteController {
     }
 
     //3. 삭제
-    @DeleteMapping("/delete") //http://localhost:8080/note/delete?nno=1
+    @DeleteMapping("/delete") //http://localhost:8080/notㄷ/delete?nno=1
     public boolean delete(@RequestParam int nno){    log.info(" delete in : " + nno);
         boolean result = noteService.delete(nno);
         return result;

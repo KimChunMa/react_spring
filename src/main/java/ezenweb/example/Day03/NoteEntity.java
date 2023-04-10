@@ -17,7 +17,6 @@ public class NoteEntity {
     @Id // primary key // JAP 사용시 1개이상 필수
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto key
     private int nno;
-
     @Column
     private String ncontents;
 

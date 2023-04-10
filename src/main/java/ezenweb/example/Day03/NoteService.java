@@ -26,10 +26,13 @@ public class NoteService {
         NoteEntity entity = noteEntityRepository.save(noteDto.toEntity()) ;
         if(entity.getNno()>= 0){
             //레코드가 생성되었으면
+            System.out.println("생성됨");
             return true;
         }
+        System.out.println("생성안됨");
         return false;
     }
+
     //2. 출력
     public ArrayList<NoteDto> get(){
         log.info(" service get in");
@@ -45,8 +48,6 @@ public class NoteService {
         });
         return list;
     };
-
-
 
     //3. 삭제
     public boolean delete(int nno){
