@@ -41,8 +41,8 @@ public class MemberController {
     @PostMapping("/info") // URL 같아도 HTTP메소드 다르므로 식별 가능
     public boolean write(@RequestBody MemberDto memberDto){ // java 클래스내 메소드 이름은 중복 불가능
         log.info(" member info write : " + memberDto);
-        boolean result = mservice.write(memberDto);
-        return false;
+       boolean result =   mservice.write(memberDto);
+        return result;
     }
 
     //2 호출 R
@@ -67,11 +67,7 @@ public class MemberController {
     }
 
     // ------------------ 과제 -----------------------
-    //5 아이디 찾기
-    @GetMapping("/findId")
-    public String findId(@RequestParam  String mname , @RequestParam  String mphone) {
-        return mservice.findId(mname, mphone);
-    }
+
 
 /*
     //------------------- 스프링 시큐리티 사용 -------------------

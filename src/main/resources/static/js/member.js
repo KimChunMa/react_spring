@@ -9,8 +9,6 @@ function onSignup(){
         mphone : document.querySelector('.mphone').value,
         mname : document.querySelector('.mname').value
     }
-
-    console.log(info)
     $.ajax({
         url:"/member/info",
         method:"post",
@@ -18,7 +16,7 @@ function onSignup(){
         contentType:"application/json",
         success: (r)=>{
             console.log(r);
-            if(r==true){alert('성공')}
+              if( r == true  ){ alert('가입이 되셨습니다.');  location.href="/"}
         }
     })
 }
@@ -55,26 +53,6 @@ function getMember(){
                 memberInfo = r;
                 console.log(memberInfo);
                 if(memberInfo.mno !=null){
-                    let html = `<table>
-                                    <tr>
-                                        <th> 번호 </th>
-                                        <th> 이메일 </th>
-                                        <th> 비번 </th>
-                                        <th> 이름 </th>
-                                        <th> 휴대번호 </th>
-                                        <th> 생성일 </th>
-                                        <th> 수정일 </th>
-                                    </tr>
-                                    <tr>
-                                        <td> ${r.mno} </td>
-                                        <td> ${r.memail} </td>
-                                        <td> ${r.mpw} </td>
-                                        <td> ${r.mname}</td>
-                                        <td> ${r.mphone} </td>
-                                        <td> ${r.cdate} </td>
-                                        <td> ${r.udate} </td>
-                                    </tr> `
-                    document.querySelector('.info').innerHTML = html;
                     document.querySelector('.nickname').innerHTML = r.mname +'님';
                 }
             }
