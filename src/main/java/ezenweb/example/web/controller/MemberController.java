@@ -4,12 +4,27 @@ import ezenweb.example.web.domain.member.MemberDto;
 import ezenweb.example.web.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
 
 @RestController // @Controller + @ResponseBody(메소드위에 하나하나 써야됨 )
 @Slf4j
 @RequestMapping("/member")
 public class MemberController {
+
+    //회원가입창 이동
+    @GetMapping("/signup")
+    public Resource getSignup(){
+        return new ClassPathResource("templates/member/signup.html");
+    }
+
+    //로그인창
+    @GetMapping("/login")
+    public Resource getLogin(){
+        return new ClassPathResource("templates/member/login.html");
+    }
+
 
     //1 @Autowired 없이
     MemberService service = new MemberService();
@@ -29,10 +44,14 @@ public class MemberController {
 
     //2 호출 R
     @GetMapping("/info")
-    public MemberDto info(@RequestParam int mno){
-        log.info(" member info get : " + mno);
-        MemberDto result = mservice.info(mno);
-        return result;
+    public MemberDto info(){
+        MemberDto result = mservice.info(); return result;
+    }
+
+    //로그아웃
+    @GetMapping("/logout")
+    public boolean logout(){
+        return mservice.logout();
     }
 
     //3 수정 U
@@ -50,4 +69,10 @@ public class MemberController {
         return true;
     }
 
+    //------------------- 스프링 시큐리티 사용 -------------------
+    @PostMapping("/login")
+    public boolean login(@RequestBody MemberDto memberDto){
+        boolean result = mservice.login(memberDto);
+        return result;
+    }
 }
