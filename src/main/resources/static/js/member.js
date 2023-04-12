@@ -23,7 +23,7 @@ function onSignup(){
     })
 }
 
-//로그인
+/*//로그인 시큐리티 사용으로 사용안함
 function onLogin(){
     let info = {
         memail : document.querySelector('.memail').value,
@@ -37,23 +37,24 @@ function onLogin(){
         contentType:"application/json",
         success: (r)=>{
 
-            if(r==true){alert('로그인 성공 ')}
+            if(r==true){alert('로그인 성공 '); location.href="/";}
             else{alert('실패 ')}
         }
 
     })
-}
+}*/
 
 //로그인 정보 출력
-info_print()
-function info_print(){
+getMember()
+function getMember(){
        $.ajax({
             url:"/member/info",
             method:"get",
             success: (r)=>{
+
                 memberInfo = r;
                 console.log(memberInfo);
-                if(memberInfo!=null){
+                if(memberInfo.mno !=null){
                     let html = `<table>
                                     <tr>
                                         <th> 번호 </th>
@@ -85,6 +86,23 @@ function logout(){
         $.ajax({
             url:"/member/logout",
             method:"get",
+            success: (r)=>{
+                if(r==true){alert('로그아웃 되었습니다');
+                location.href="/"}
+
+            }
+        })
+
+}
+
+//아이디 찾기
+function findId(){
+        $.ajax({
+            url:"/member/findId",
+            method:"get",
+            data:{"mname":document.querySelector('.mname').value ,
+                  "mphone":document.querySelector('.mphone').value
+                  },
             success: (r)=>{
                 if(r==true){alert('로그아웃 되었습니다');
                 location.href="/"}

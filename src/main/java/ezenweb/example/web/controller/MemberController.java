@@ -1,12 +1,15 @@
 package ezenweb.example.web.controller;
 
 import ezenweb.example.web.domain.member.MemberDto;
+import ezenweb.example.web.domain.member.MemberEntity;
 import ezenweb.example.web.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController // @Controller + @ResponseBody(메소드위에 하나하나 써야됨 )
 @Slf4j
@@ -48,12 +51,6 @@ public class MemberController {
         MemberDto result = mservice.info(); return result;
     }
 
-    //로그아웃
-    @GetMapping("/logout")
-    public boolean logout(){
-        return mservice.logout();
-    }
-
     //3 수정 U
     @PutMapping("/info")
     public boolean update(@RequestBody MemberDto memberDto){
@@ -69,10 +66,25 @@ public class MemberController {
         return true;
     }
 
+    // ------------------ 과제 -----------------------
+    //5 아이디 찾기
+    @GetMapping("/findId")
+    public String findId(@RequestParam  String mname , @RequestParam  String mphone) {
+        return mservice.findId(mname, mphone);
+    }
+
+/*
     //------------------- 스프링 시큐리티 사용 -------------------
     @PostMapping("/login")
     public boolean login(@RequestBody MemberDto memberDto){
         boolean result = mservice.login(memberDto);
         return result;
     }
+
+    //로그아웃
+    @GetMapping("/logout")
+    public boolean logout(){
+        return mservice.logout();
+    }
+    */
 }
