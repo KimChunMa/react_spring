@@ -35,7 +35,8 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-            log.info("서비스 매개변수 : "+ userRequest.toString());
+
+        log.info("서비스 매개변수 : "+ userRequest.toString());
 
         //1. 인증[로그인] 결과 토큰 확인
         OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
@@ -49,22 +50,38 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         log.info("클라이언트 id : " + registrationId);
 
-        MemberDto memberDto = new MemberDto();
+
 
         //4
         //구글 이메일, 이름 호출
        String email = (String)oAuth2User.getAttributes().get("email");
-        log.info("google name" +email );
+        log.info("google name:" +email );
 
        String name = (String)oAuth2User.getAttributes().get("name");
-        log.info("google name" +name );
-        
+        log.info("google name:" +name );
+
+        // 인가 객체 [0Auth2User ---->  통합 Dto(일반 dto + oauth)]
+        MemberDto memberDto = new MemberDto();
+        memberDto.set소셜회원정보(oAuth2User.getAttributes());
         memberDto.setMemail(email);
         memberDto.setMname(name);
             Set<GrantedAuthority> 권한목록 = new HashSet<>();
             SimpleGrantedAuthority 권한 = new SimpleGrantedAuthority("ROLE_oauthuser");
             권한목록.add(권한);
             memberDto.set권한목록(권한목록);
+
+            //1. DB 저장하기전에 해당 이메일로 된 이메일 존재하는지 검사
+            //DB처리 [DB에 회원가입, 두번쨰 방문시 db수정]
+            MemberEntity entity =  memberEntityRepository.findByMemail(email);
+            if(entity == null){ // 첫방문
+                memberDto.setMrole("oauthuser"); // DB에 저장할 권한명
+                memberEntityRepository.save(memberDto.toEntity());
+            }else{//두번쨰 이상 수정처리
+                entity.setMname(name);
+            }
+
+            
+            
 
         return memberDto;
     }
