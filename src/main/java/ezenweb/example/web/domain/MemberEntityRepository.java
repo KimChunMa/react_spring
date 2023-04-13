@@ -30,6 +30,7 @@ public interface MemberEntityRepository
     //6. 비밀번호 찾기 [아이디, 전화번호]
     boolean existsByMemailAndMphone(String memail, String mphone);
 
+    Optional<MemberEntity> findByMpw(String mpw);
 }
 
 /*

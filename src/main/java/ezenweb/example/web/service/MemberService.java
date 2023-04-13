@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 // UserDetailsService : 일반유저 서비스
 // OAuth2UserService : oauth2 유저 서비스 구현
@@ -79,10 +76,6 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
             }else{//두번쨰 이상 수정처리
                 entity.setMname(name);
             }
-
-            
-            
-
         return memberDto;
     }
 
@@ -197,7 +190,57 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         return false;
     }
 
+
+
     // ------------------ 과제 -----------------------
+
+    //5.이름+전화번호 일치시 이메일 알려주기
+    public String findId(String mname, String mphone){
+        Optional<MemberEntity> entityOptional =
+                memberEntityRepository.findByMnameAndMphone(mname,mphone);
+        if(entityOptional.isPresent()){
+            return entityOptional.get().getMemail();
+        }
+        return null;
+    }
+
+    //6. 이메일+전화번호 일치시 임시비밀번호 6자리
+    public String findPw(String memail, String mphone){
+        //<null값 대비> 이메일+전화번호 일치시
+        Optional<MemberEntity> entityOptional =
+                memberEntityRepository.findByMnameAndMphone(memail,mphone);
+        if(entityOptional.isPresent()){ //존재시 6자리 난수
+            MemberEntity entity = entityOptional.get();
+            String pw = "";
+
+            for(int i = 0 ; i < 6 ; i++) {
+                pw +=  (int)(Math.random() * 10); }
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+            //인코더 : 암호화 , 디코더:원본으로
+            entity.setMpw(passwordEncoder.encode(pw));
+            System.out.println( passwordEncoder.encode(pw) );
+            return pw;
+        }
+        return null;
+    }
+
+    //7. 회원탈퇴하기
+    @Transactional
+    public boolean delete(String mpw){
+        Optional<MemberEntity> entityOptional =
+                memberEntityRepository.findByMpw(mpw);
+
+        if(entityOptional.isPresent()){
+            MemberEntity memberEntity =
+                    entityOptional.get();
+            memberEntityRepository.delete(memberEntity);
+            return true;
+        }
+        return false;
+    }
+
 
     /*
  //2.[세션에 존재하는정보 제거] 로그아웃

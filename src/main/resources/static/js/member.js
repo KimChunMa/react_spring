@@ -82,17 +82,55 @@ function logout(){
 
 //아이디 찾기
 function findId(){
+
+    let info = {
+        "mname":document.querySelector('.mname').value ,
+        "mphone":document.querySelector('.mphone').value
+    }
         $.ajax({
             url:"/member/findId",
-            method:"get",
-            data:{"mname":document.querySelector('.mname').value ,
-                  "mphone":document.querySelector('.mphone').value
-                  },
+            method:"post",
+            data:JSON.stringify(info),
+            contentType:"application/json",
             success: (r)=>{
-                if(r==true){alert('로그아웃 되었습니다');
-                location.href="/"}
-
+                alert('회원님의 아이디는 ' + r + ' 입니다.');
             }
         })
+}
 
+//비번 찾기
+function findPw(){
+    let info = {
+        "memail":document.querySelector('.memail').value ,
+        "mphone":document.querySelector('.mphone').value
+    }
+        $.ajax({
+            url:"/member/findPw",
+            method:"post",
+            data:JSON.stringify(info),
+            contentType:"application/json",
+            success: (r)=>{
+                alert('회원님의 임시비밀번호는 ' + r + ' 입니다.');
+            }
+        })
+}
+
+
+//회원탈퇴하기
+function mdelete(){
+       if(memberInfo.mno==null){
+         alert('로그인한 사람만 가능합니다.');
+         location.href="/";
+         return;
+         }
+
+
+        $.ajax({
+            url:"/member/mdelete",
+            method:"delete",
+            data:document.querySelector('.mpw').value ,
+            success: (r)=>{
+                if(r==true){alert('회원탈퇴 되었습니다.')}
+            }
+        })
 }

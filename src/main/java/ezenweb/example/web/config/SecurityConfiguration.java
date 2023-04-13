@@ -35,19 +35,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .hasRole("user") // 위 URL 패턴에 요청할수 있는 권한명
 
                 .antMatchers("/admin/**") // localohst:8080/admin/ ~~ 이하 페이지 막기
-                .hasRole("admin")
-
+                    .hasRole("admin")
                 .antMatchers("/board/write")
                     .hasRole("user")
-
                 .antMatchers("/**") // localhost:8080 ~ 이하 페이지는 권한 해제
                     .permitAll()//권한 해제
+
 
                     // 토큰 (ROLE_user) : ROLE_ 제외한 권한명 작성
                 .and()
                     .csrf() //사이트 간 요청 위조 [post,put http 사용 불가]
                         .ignoringAntMatchers("/member/info") //특정 매핑 URL 허용
                         .ignoringAntMatchers("/member/login")
+                        .ignoringAntMatchers("/member/findPw")
+                        .ignoringAntMatchers("/member/findId")
+                        .ignoringAntMatchers("/member/mdelete")
+
+
                 .and() // 기능 추가/구분 할때 사용되는 메소드
                     .formLogin()
                         .loginPage("/member/login") // 로그인페이지로 사용할 URL
@@ -56,12 +60,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .failureUrl("/member/login")//로그인 실패시 이동할 매핑 URL
                     .usernameParameter("memail") // 로그인시 사용될 계정 아이디의 필드명
                     .passwordParameter("mpw") // 로그인시 사용될 계정 패스워드 필드명
-                
+
+
                 .and() 
                     .logout()
                         .logoutRequestMatcher( new AntPathRequestMatcher("/member/logout"))//로그아웃 처리를 요청할 매핑 URL
                         .logoutSuccessUrl("/") // 로그아웃 성공했을때 이동할 매핑 URL
                         .invalidateHttpSession(true)  //세션 초기화
+
+
                 .and()
                     .oauth2Login() // 소셜 로그인
                     .defaultSuccessUrl("/") // 로그인성공시 이동할 매핑 URL
