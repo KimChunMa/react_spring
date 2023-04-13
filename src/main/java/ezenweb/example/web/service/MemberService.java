@@ -12,6 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +26,48 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+// UserDetailsService : 일반유저 서비스
+// OAuth2UserService : oauth2 유저 서비스 구현
+// OAuth2UserService<OAuth2UserRequest , OAuth2User> : oauth2 유저 서비스 구현
 @Service
 @Slf4j
-public class MemberService implements UserDetailsService {
+public class MemberService implements UserDetailsService , OAuth2UserService<OAuth2UserRequest , OAuth2User> {
+
+    @Override
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+            log.info("서비스 매개변수 : "+ userRequest.toString());
+
+        //1. 인증[로그인] 결과 토큰 확인
+        OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
+        log.info("서비스 정보 : "+ oAuth2UserService.loadUser(userRequest));
+
+        //2. 전달받은 정보객체
+        OAuth2User oAuth2User = oAuth2UserService.loadUser(userRequest);
+        log.info("회원정보 : " + oAuth2User.getAuthorities());
+
+        //3. 클라이언트id 요청 [구글, 네이버 , 카카오 ]
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        log.info("클라이언트 id : " + registrationId);
+
+        MemberDto memberDto = new MemberDto();
+
+        //4
+        //구글 이메일, 이름 호출
+       String email = (String)oAuth2User.getAttributes().get("email");
+        log.info("google name" +email );
+
+       String name = (String)oAuth2User.getAttributes().get("name");
+        log.info("google name" +name );
+        
+        memberDto.setMemail(email);
+        memberDto.setMname(name);
+            Set<GrantedAuthority> 권한목록 = new HashSet<>();
+            SimpleGrantedAuthority 권한 = new SimpleGrantedAuthority("ROLE_oauthuser");
+            권한목록.add(권한);
+            memberDto.set권한목록(권한목록);
+
+        return memberDto;
+    }
 
     @Autowired //저장소
     private MemberEntityRepository memberEntityRepository;

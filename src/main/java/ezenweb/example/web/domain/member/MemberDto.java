@@ -6,16 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 //시큐리티 + 일반 DTO
 @Data@Builder
 @AllArgsConstructor@NoArgsConstructor
-public class MemberDto implements UserDetails {
+public class MemberDto implements UserDetails , OAuth2User {
+
     //회원번호, 아이디[메일], 비번, 이름, 전화번호 , 등급
     private int mno;
     private String memail;
@@ -24,6 +27,7 @@ public class MemberDto implements UserDetails {
     private String mphone;
     private String mrole;
     private Set<GrantedAuthority> 권한목록;
+    private Map<String, Object> 소셜회원정보;
 
     private LocalDateTime cdate;
     private LocalDateTime udate;
@@ -37,6 +41,21 @@ public class MemberDto implements UserDetails {
                 .build();
     }
 
+    //---------------------- OAuth2user ------------------
+    @Override
+    public Map<String, Object> getAttributes() {
+        return this.소셜회원정보;
+    }
+
+    @Override
+    public String getName() {
+        return this.memail;
+    }
+
+
+
+
+    /* ---------------- UserDetails ------------------- */
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -61,6 +61,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .logout()
                         .logoutRequestMatcher( new AntPathRequestMatcher("/member/logout"))//로그아웃 처리를 요청할 매핑 URL
                         .logoutSuccessUrl("/") // 로그아웃 성공했을때 이동할 매핑 URL
-                        .invalidateHttpSession(true) ; //세션 초기화
+                        .invalidateHttpSession(true)  //세션 초기화
+                .and()
+                    .oauth2Login() // 소셜 로그인
+                    .defaultSuccessUrl("/") // 로그인성공시 이동할 매핑 URL
+                    .userInfoEndpoint() // 스프링 시큐리티로 들어올 수 있도록 시큐리티 로그인 엔드포인트[종착점]
+                    .userService(memberService); // oauth2 서비스를 처리할 서비스 구현
+
+
     }
 }
