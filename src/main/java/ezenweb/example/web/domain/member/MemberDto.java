@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Set;
 
 //시큐리티 + 일반 DTO
 @Data@Builder
@@ -22,22 +23,24 @@ public class MemberDto implements UserDetails {
     private String mname;
     private String mphone;
     private String mrole;
+    private Set<GrantedAuthority> 권한목록;
 
     private LocalDateTime cdate;
     private LocalDateTime udate;
+
 
     public MemberEntity toEntity(){
         return MemberEntity.builder()
                 .mno(this.mno) .memail(this.memail)
                 .mpw(this.mpw).mname(this.mname)
-                .mphone(this.mphone).mrole(this.mrole)
+                .mphone(this.mphone).mrole(this.getMrole())
                 .build();
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.권한목록;
     }
 
     @Override

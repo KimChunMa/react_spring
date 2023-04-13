@@ -5,6 +5,8 @@ import ezenweb.example.web.domain.member.MemberDto;
 import ezenweb.example.web.domain.member.MemberEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +16,10 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -23,10 +28,7 @@ public class MemberService implements UserDetailsService {
     @Autowired //저장소
     private MemberEntityRepository memberEntityRepository;
 
-
-
-
-    //1. 회원가입
+    //1. 일반 회원가입 [본 어플리케이션 에서 가입한 사람]
     @Transactional
     public boolean write( MemberDto memberDto){
         //시큐리티에서 제공하는 암호화(사람이해x 컴퓨터만 이해o) 사용하기
@@ -36,6 +38,9 @@ public class MemberService implements UserDetailsService {
 
         //인코더 : 암호화 , 디코더:원본으로
         memberDto.setMpw(passwordEncoder.encode((memberDto.getMpw() ) ) );
+
+        //등급부여
+        memberDto.setMrole("user");
 
         MemberEntity entity =
                memberEntityRepository.save(memberDto.toEntity());
@@ -54,7 +59,17 @@ public class MemberService implements UserDetailsService {
 
         // 3. 검증후 세션에 저장할 dto 반환
         MemberDto dto = entity.toDto();
-        log.info("dto : "+dto);
+        
+        //1. 권한목록 만들기
+        Set<GrantedAuthority> 권한목록 = new HashSet<>();
+       //2. 권한 객체 만들기 [DB에 존재하는 권한명(ROLE_!!!!)으로]
+            //권한 없을경우 : ROLE_ANONYMOUS / 권한 있을경우 ROLE_권한명
+        SimpleGrantedAuthority 권한명 = new SimpleGrantedAuthority("ROLE_"+entity.getMrole());
+        //3. 권한객체를 권한목록[컬렉션]에 추가
+        권한목록.add(권한명);
+        //4. UserDetails에 권한목록 대입
+        dto.set권한목록(권한목록);
+        log.info("로그인 dto : "+dto);
         return dto;
     }
 
@@ -72,7 +87,8 @@ public class MemberService implements UserDetailsService {
         //인증된 회원의 정보 호출
         log.info("Auto : " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(o == null) {return null;}
+        if( o.equals("anonymousUser") ){ return null; }
+        // [ Principal ]  // 인증  실패시 : anonymousUser   // 인증  성공시 : 회원정보[Dto]
 
         //2. 인증된 객체내 회원정보 [Principal] 타입 변환
         return (MemberDto)o;
