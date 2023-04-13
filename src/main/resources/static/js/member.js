@@ -54,10 +54,15 @@ function getMember(){
                 console.log(memberInfo);
                 if(memberInfo.mno !=null){
                     document.querySelector('.nickname').innerHTML = r.mname +'님';
+                    document.querySelector('.logout').innerHTML =
+                    `<a href="/member/logout"><button type="button"> 로그아웃 </button></a>`
+
                 }
             }
         })
 }
+
+/*
 
 //로그아웃
 function logout(){
@@ -72,6 +77,8 @@ function logout(){
         })
 
 }
+*/
+
 
 //아이디 찾기
 function findId(){
