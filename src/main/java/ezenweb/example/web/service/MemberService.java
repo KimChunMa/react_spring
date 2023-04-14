@@ -44,18 +44,38 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         log.info("회원정보 : " + oAuth2User.getAuthorities());
 
         //3. 클라이언트id 요청 [구글, 네이버 , 카카오 ]
+
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         log.info("클라이언트 id : " + registrationId);
 
+        String email = null;
+        String name = null;
+
+        if(registrationId.equals("kakao")) { // 만약 카카오 회원이면
+            Map<String,Object> kakao_account =(Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
+            Map<String,Object> profile =(Map<String, Object>)kakao_account.get("profile");
+
+            System.out.println(kakao_account);
+            System.out.println(profile);
+
+            email = (String)kakao_account.get("email");
+            name = (String)profile.get("nickname");
+
+        }else if(registrationId.equals("naver")) { // 카카오 회원
+            Map<String,Object> response =(Map<String, Object>) oAuth2User.getAttributes().get("response")
+
+            email = (String)response.get("email");
+            name = (String)response.get("nickname");
 
 
-        //4
-        //구글 이메일, 이름 호출
-       String email = (String)oAuth2User.getAttributes().get("email");
-        log.info("google name:" +email );
+        }else if(registrationId.equals("google")) { // 구글 회원
+            email = (String)oAuth2User.getAttributes().get("email");
+            log.info("google name:" +email );
 
-       String name = (String)oAuth2User.getAttributes().get("name");
-        log.info("google name:" +name );
+            name = (String)oAuth2User.getAttributes().get("name");
+            log.info("google name:" +name );
+        }
+
 
         // 인가 객체 [0Auth2User ---->  통합 Dto(일반 dto + oauth)]
         MemberDto memberDto = new MemberDto();
@@ -63,7 +83,7 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         memberDto.setMemail(email);
         memberDto.setMname(name);
             Set<GrantedAuthority> 권한목록 = new HashSet<>();
-            SimpleGrantedAuthority 권한 = new SimpleGrantedAuthority("ROLE_oauthuser");
+            SimpleGrantedAuthority 권한 = new SimpleGrantedAuthority("ROLE_user");
             권한목록.add(권한);
             memberDto.set권한목록(권한목록);
 
@@ -131,7 +151,7 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
     
     //2.[세션에 존재하는 회원] 호출
     @Transactional
-    public MemberDto info( ){
+    public MemberDto info(){
        //1. 시큐리티 인증 된 userDetails 객체로 관리
         // SecurityContextHolder : 시큐리티 정보 저장소
         // SecurityContextHolder.getContext() : 시큐리티 저장된 정보 호출
