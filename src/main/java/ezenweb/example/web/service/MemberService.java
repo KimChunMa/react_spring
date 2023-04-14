@@ -62,7 +62,7 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
             name = (String)profile.get("nickname");
 
         }else if(registrationId.equals("naver")) { // 카카오 회원
-            Map<String,Object> response =(Map<String, Object>) oAuth2User.getAttributes().get("response")
+            Map<String,Object> response =(Map<String, Object>) oAuth2User.getAttributes().get("response");
 
             email = (String)response.get("email");
             name = (String)response.get("nickname");
@@ -105,6 +105,13 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
     //1. 일반 회원가입 [본 어플리케이션 에서 가입한 사람]
     @Transactional
     public boolean write( MemberDto memberDto){
+        MemberEntity entityOptional =
+                memberEntityRepository.findByMemail(memberDto.getMemail());
+
+        if(entityOptional!=null){
+            return false;
+        }
+
         //시큐리티에서 제공하는 암호화(사람이해x 컴퓨터만 이해o) 사용하기
         // db에 패스워드 감추기, 정보 이동시 노출방지
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -159,6 +166,7 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         log.info("Auto : "+ SecurityContextHolder.getContext().getAuthentication() );
 
         //인증된 회원의 정보 호출
+        System.out.println("-----------------------------------");
         log.info("Auto : " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if( o.equals("anonymousUser") ){ return null; }
@@ -225,6 +233,7 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
     }
 
     //6. 이메일+전화번호 일치시 임시비밀번호 6자리
+    @Transactional
     public String findPw(String memail, String mphone){
         //<null값 대비> 이메일+전화번호 일치시
         Optional<MemberEntity> entityOptional =
@@ -233,14 +242,14 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
             MemberEntity entity = entityOptional.get();
             String pw = "";
 
-            for(int i = 0 ; i < 6 ; i++) {
+            for(int i = 0 ; i < 6 ; i++) { //
                 pw +=  (int)(Math.random() * 10); }
 
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-            //인코더 : 암호화 , 디코더:원본으로
-            entity.setMpw(passwordEncoder.encode(pw));
-            System.out.println( passwordEncoder.encode(pw) );
+            //6가지 난수+암호화 엔티티 대입
+            entity.setMpw(passwordEncoder.encode(pw)); 
+            System.out.println("수정된 entity : "+ entity );
             return pw;
         }
         return null;
@@ -248,16 +257,34 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
 
     //7. 회원탈퇴하기
     @Transactional
-    public boolean delete(String mpw){
-        Optional<MemberEntity> entityOptional =
-                memberEntityRepository.findByMpw(mpw);
+    public boolean mdelete(String memail,String mpw){
+        BCryptPasswordEncoder pwe = new BCryptPasswordEncoder();
 
-        if(entityOptional.isPresent()){
-            MemberEntity memberEntity =
-                    entityOptional.get();
-            memberEntityRepository.delete(memberEntity);
-            return true;
+        //입력받은 비번 암호화후 DB에 찾기
+        MemberEntity me =
+                memberEntityRepository.findByMemail(memail);
+
+        if(me!=null){ // 찾으면 삭제
+            if(pwe.matches( mpw, me.getMpw()) ) { //끝을 복호화됨
+                memberEntityRepository.delete(me);
+                return true;
+            }
         }
+        return false;
+    }
+
+    @Transactional
+    public boolean mUpdate(String mphone,String mname){
+        //세션에 등록된 객체 저장
+        MemberDto mdto  = (MemberDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MemberEntity me = mdto.toEntity();
+
+       if(memberEntityRepository.findByMemail(me.getMemail() ) != null ){
+            //세션에 등록된 객체를 다시 DB객체에 넣기
+            me = memberEntityRepository.findByMemail(me.getMemail());
+            me.setMphone(mphone); me.setMname(mname);
+            return true;
+        };
         return false;
     }
 

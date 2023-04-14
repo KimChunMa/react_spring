@@ -34,7 +34,7 @@ public class MemberController {
     @PostMapping("/info") // URL 같아도 HTTP메소드 다르므로 식별 가능
     public boolean write(@RequestBody MemberDto memberDto){ // java 클래스내 메소드 이름은 중복 불가능
         log.info(" member info write : " + memberDto);
-       boolean result =   mservice.write(memberDto);
+       boolean result = mservice.write(memberDto);
         return result;
     }
 
@@ -91,10 +91,23 @@ public class MemberController {
     public Resource delete(){return new ClassPathResource("templates/member/delete.html");}
 
     @DeleteMapping("/mdelete")
-    public boolean delete(@RequestParam String mpw){
-        boolean result = mservice.delete(mpw);
+    public boolean mdelete(@RequestParam String mpw, @RequestParam String memail ){
+        boolean result = mservice.mdelete(memail ,mpw);
         return result;
     }
+
+    //회원수정 페이지 이동
+    @GetMapping("/mupdate")
+    public Resource update(){return new ClassPathResource("templates/member/update.html");}
+
+    @PutMapping("/mupdate")
+    public boolean mUpdate(@RequestParam String mphone, @RequestParam String mname ){
+
+        boolean result = mservice.mUpdate(mphone,mname);
+        return true;
+    }
+
+
 
 /*
     //------------------- 스프링 시큐리티 사용 -------------------

@@ -16,7 +16,9 @@ function onSignup(){
         contentType:"application/json",
         success: (r)=>{
             console.log(r);
-              if( r == true  ){ alert('가입이 되셨습니다.');  location.href="/"}
+              if( r == true  ){ alert('가입이 되셨습니다.');}
+              else if(r==false){alert('등록된 아이디입니다.')}
+              else{alert('가입실패')}
         }
     })
 }
@@ -128,9 +130,34 @@ function mdelete(){
         $.ajax({
             url:"/member/mdelete",
             method:"delete",
-            data:document.querySelector('.mpw').value ,
+            data:{"mpw":document.querySelector('.mpw').value,
+                  "memail":memberInfo.memail},
             success: (r)=>{
+                console.log(r);
                 if(r==true){alert('회원탈퇴 되었습니다.')}
+            }
+        })
+}
+
+
+//회원수정하기
+function mUpdate(){
+       if(memberInfo.mno==null){
+         alert('로그인한 사람만 가능합니다.');
+         location.href="/";
+         return;
+         }
+
+        $.ajax({
+            url:"/member/mupdate",
+            method:"put",
+            data:{
+                  "mphone":document.querySelector('.mphone').value,
+                  "mname":document.querySelector('.mname').value},
+            success: (r)=>{
+                console.log(r);
+                if(r==true){alert('수정 되었습니다.')}
+                else{alert('오류!')}
             }
         })
 }
