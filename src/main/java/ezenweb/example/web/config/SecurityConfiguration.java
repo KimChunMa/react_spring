@@ -1,5 +1,6 @@
 package ezenweb.example.web.config;
 
+import ezenweb.example.web.controller.AuthSucessFailHandler;
 import ezenweb.example.web.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration // 스프링 빈 등록 [MVC 컴포넌트]
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AuthSucessFailHandler authSucessFailHandler;
 
     @Autowired
     private MemberService memberService;
@@ -57,8 +61,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .formLogin()
                         .loginPage("/member/login") // 로그인페이지로 사용할 URL
                         .loginProcessingUrl("/member/login") //로그인처리할 매핑 URL
-                        .defaultSuccessUrl("/") //로그인 성공시 매핑 url 
-                        .failureUrl("/member/login")//로그인 실패시 이동할 매핑 URL
+                        //.defaultSuccessUrl("/") //로그인 성공시 매핑 url
+                        .successHandler(authSucessFailHandler)
+                        //.failureUrl("/member/login")//로그인 실패시 이동할 매핑 URL
+                        .failureHandler(authSucessFailHandler)
                     .usernameParameter("memail") // 로그인시 사용될 계정 아이디의 필드명
                     .passwordParameter("mpw") // 로그인시 사용될 계정 패스워드 필드명
 
@@ -73,6 +79,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                     .oauth2Login() // 소셜 로그인
                     .defaultSuccessUrl("/") // 로그인성공시 이동할 매핑 URL
+                    .successHandler(authSucessFailHandler)
                     .userInfoEndpoint() // 스프링 시큐리티로 들어올 수 있도록 시큐리티 로그인 엔드포인트[종착점]
                     .userService(memberService); // oauth2 서비스를 처리할 서비스 구현
 

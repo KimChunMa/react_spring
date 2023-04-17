@@ -1,6 +1,6 @@
 let memberInfo = null ;
 
-//회원가입
+//1. 회원가입
 function onSignup(){
 
     let info = {
@@ -21,6 +21,25 @@ function onSignup(){
               else{alert('가입실패')}
         }
     })
+}
+
+//2. 로그인
+function onLogin(){
+    let loginForm = document.querySelectorAll('.loginForm')[0];
+    let loginFormData = new FormData(loginForm);
+    console.log(loginFormData)
+    $.ajax({
+        url: "/member/login",
+        method:'POST',
+        data:loginFormData ,
+        contentType:false,
+        processData:false,
+        success : (r)=>{
+           console.log(r);
+        }
+    })
+
+
 }
 
 /*//로그인 시큐리티 사용으로 사용안함
@@ -44,7 +63,7 @@ function onLogin(){
     })
 }*/
 
-//로그인 정보 출력
+//3. 로그인 정보 출력
 getMember()
 function getMember(){
        $.ajax({

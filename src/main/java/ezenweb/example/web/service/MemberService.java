@@ -136,7 +136,7 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         //2. loadUserByUserame() 메소드 : 아이디 검증
             //시큐리티가 패스워드 검증
         MemberEntity entity = memberEntityRepository.findByMemail(memail);
-        if(entity == null){return null;}
+        if(entity == null){throw new UsernameNotFoundException("해당 계정의 회원이 없습니다.");}
 
         // 3. 검증후 세션에 저장할 dto 반환
         MemberDto dto = entity.toDto();
