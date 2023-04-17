@@ -18,7 +18,7 @@ public class ReplyEntity {
     private String rcontent;
 
     @Column
-    private String rdate;
+    private String rdate; 
 
     @Column
     private int rindex;
