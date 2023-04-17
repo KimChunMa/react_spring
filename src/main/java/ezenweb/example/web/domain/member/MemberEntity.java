@@ -36,7 +36,7 @@ public class MemberEntity extends BaseTime{
     // 게시물 목록 = 내가 쓴 게시물
     @OneToMany(mappedBy = "memberEntity")
     @Builder.Default
-    private List<BoardEntity> memberEntityList = new ArrayList<>();
+    private List<BoardEntity> BoardEntityList = new ArrayList<>();
 
     // 댓글 목록 = 내가 쓴 댓글
     @OneToMany(mappedBy = "memberEntity")

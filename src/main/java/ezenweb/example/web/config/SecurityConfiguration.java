@@ -55,6 +55,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .ignoringAntMatchers("/member/findId")
                         .ignoringAntMatchers("/member/mdelete")
                         .ignoringAntMatchers("/member/mupdate")
+                        .ignoringAntMatchers("/board/category/write")
+                        .ignoringAntMatchers("/board/category/write")
 
 
                 .and() // 기능 추가/구분 할때 사용되는 메소드
