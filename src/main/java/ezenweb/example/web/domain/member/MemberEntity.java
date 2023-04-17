@@ -1,12 +1,15 @@
 package ezenweb.example.web.domain.member;
 
 import ezenweb.example.web.domain.BaseTime;
+import ezenweb.example.web.domain.border.BoardEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -28,6 +31,11 @@ public class MemberEntity extends BaseTime{
     private String mphone;
     @Column
     private String mrole;
+
+    @OneToMany(mappedBy = "memberEntity")
+    @Builder.Default
+    private List<BoardEntity> memberEntityList = new ArrayList<>();
+
 
     public MemberDto toDto(){
         return MemberDto.builder()
