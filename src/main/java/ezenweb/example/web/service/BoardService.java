@@ -127,7 +127,7 @@ public class BoardService {
         return list;
     }
 
-    //3. 내가 쓴 게시물 출력
+    //5. 내가 쓴 게시물 출력
     public List<BoardDto> myboards(){
         //1. 로그인 인증 세션 [object] => dto 형변환
        MemberDto memberDto = (MemberDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

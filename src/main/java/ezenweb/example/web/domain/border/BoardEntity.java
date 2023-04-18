@@ -38,7 +38,7 @@ public class BoardEntity extends BaseTime {
     //FK = 외래키
     //카테고리 번호
     @ManyToOne //pk  다수가 하나에게 [fk --> pk]
-    @JoinColumn(name="cno") // pk필드명
+    @JoinColumn(name="  cno") // pk필드명
     @ToString.Exclude // 해당필드는  @ToString을 안쓰겠다. [양뱡향]
     private CategoryEntity categoryEntity;
 
