@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -35,6 +37,24 @@ public class BoardService {
         if(entity.getCno() >= 1 ) {return true;}
         return false;
     }
+
+    //1. 카테고리 출력
+    @Transactional
+    @PostMapping("/category/write")
+    public Map<Integer, String > categoryList(){
+        List<CategoryEntity> categoryEntityList
+                = categoryEntityRepository.findAll();
+        // 형변환 List <엔티티> ---> MAP
+
+        Map<Integer,String> map = new HashMap<>();
+
+        categoryEntityList.forEach( (e) -> {
+            map.put( e.getCno() , e.getCname()) ;
+        });
+        return map;
+    }
+
+
 
     //2. 게시물 쓰기
     @Transactional
