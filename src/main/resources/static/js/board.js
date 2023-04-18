@@ -100,6 +100,37 @@ function getBoard(cno){
         }
     })
 }
+
+//6. 내가 작성한 (로그인 되어있다는 가정) 게시물
+myboards();
+function myboards(){
+    $.ajax({
+        url:"/board/myboards",
+        method:"get",
+          success:(r)=>{
+                    console.log(r);
+                    let html = `<tr>
+                                    <th>번호</th>
+                                    <th>제목</th>
+                                    <th>작성자</th>
+                                    <th>작성일</th>
+                                    <th>조회수</th>
+                                </tr>`;
+                    r.forEach((o)=>{
+                        html += `<tr>
+                                    <td>${o.bno}</td>
+                                    <td>${o.btitle}</td>
+                                    <td>${o.memail}</td>
+                                    <td>${o.bdate}</td>
+                                    <td>${o.bview}</td>
+                                </tr>`;
+
+
+                    })
+                    document.querySelector(".boardlistbox").innerHTML = html;
+                }
+    })//ajax e
+}//myboards e
 /*
     해당 변수의 자료형 확인 Prototype
     Array: forEach() 가능

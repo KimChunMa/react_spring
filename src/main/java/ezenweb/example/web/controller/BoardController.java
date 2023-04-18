@@ -69,7 +69,7 @@ public class BoardController {
     @GetMapping("/myboards")
     public List<BoardDto> myboards(){
         List<BoardDto> result = boardService.myboards();
-        return null;
+        return result;
     }
 
 }

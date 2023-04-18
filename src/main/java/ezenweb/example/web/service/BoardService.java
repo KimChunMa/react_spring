@@ -129,7 +129,16 @@ public class BoardService {
 
     //3. 내가 쓴 게시물 출력
     public List<BoardDto> myboards(){
-
-        return null;
+        //1. 로그인 인증 세션 [object] => dto 형변환
+       MemberDto memberDto = (MemberDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       // 일반회원dto : 모든 정보, oauth2dto : memail, mname, mrol
+       //2. 회원 엔티티 찾기
+        MemberEntity entity =  memberEntityRepository.findByMemail(memberDto.getMemail());
+        //3. 회원 엔티티 내 게시물리스트를 반복문 돌려서 dto 리스트로 변환
+        List<BoardDto> list = new ArrayList<>();
+        entity.getBoardEntityList().forEach((e)->{
+            list.add(e.toDto());
+        });
+        return list;
     }
 }
