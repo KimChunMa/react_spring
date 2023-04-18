@@ -9,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -140,5 +138,30 @@ public class BoardService {
             list.add(e.toDto());
         });
         return list;
+    }
+
+    /*------------------------- 과제 ---------------------------------*/
+    //6. 게시물 상세 출력
+    public BoardDto s_board(int bno){
+        BoardEntity boardEntity = boardEntityRepository.findById(bno).get();
+
+        if(boardEntity!=null){
+            return boardEntity.toDto();
+        }
+        return null;
+    }
+
+    //7. 게시물 삭제하기
+    public boolean b_del(int bno){
+        MemberDto memberDto =
+                (MemberDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        BoardEntity boardEntity = boardEntityRepository.findById(bno).get();
+
+        if(boardEntity.getMemberEntity().getMno() == memberDto.getMno()){
+            boardEntityRepository.delete(boardEntity);
+            return true;
+        }
+        return false;
     }
 }

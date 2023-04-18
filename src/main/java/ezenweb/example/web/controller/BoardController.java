@@ -72,4 +72,19 @@ public class BoardController {
         return result;
     }
 
+    /* -------------------------- 과제 ------------------------*/
+    //4. 게시물 상세 출력
+    @GetMapping("/s_board")
+    public BoardDto s_board(@RequestParam int bno){
+        return boardService.s_board(bno);
+    }
+
+    //5. 게시물 삭제
+    @DeleteMapping("/b_del")
+    public boolean b_del(@RequestParam int bno){
+        return boardService.b_del(bno);
+    }
+
+
+
 }

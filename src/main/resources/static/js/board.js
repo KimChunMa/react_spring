@@ -88,7 +88,7 @@ function getBoard(cno){
             r.forEach((o)=>{
                 html += `<tr>
                             <td>${o.bno}</td>
-                            <td>${o.btitle}</td>
+                            <td onclick="s_board(${o.bno})" style="cursor:pointer;">${o.btitle}</td>
                             <td>${o.memail}</td>
                             <td>${o.bdate}</td>
                             <td>${o.bview}</td>
@@ -131,6 +131,61 @@ function myboards(){
                 }
     })//ajax e
 }//myboards e
+
+
+function s_board(bno){
+    $.ajax({
+    url:"/board/s_board",
+    method:"get",
+    data:{"bno":bno},
+    success:(r)=>{
+        console.log(r);
+
+        let html = `<table border="1">
+                        <tr>
+                            <th>게시판 번호</th>
+                            <th>카테고리</th>
+                            <th>제목</th>
+                            <th>내용</th>
+                            <th>작성자 이메일</th>
+                            <th>작성일</th>
+                            <th>조회수</th>
+                            <th>삭제</th>
+                        </tr>
+                        <tr>
+                            <td>${r.bno}</td>
+                            <td>${r.cname}</td>
+                            <td>${r.btitle}</td>
+                            <td>${r.bcontent}</td>
+                            <td>${r.memail}</td>
+                            <td>${r.bdate}</td>
+                            <td>${r.bview}</td>
+                            <td> <button type="button" onclick="b_del(${r.bno})">
+                                 ${r.bno} 삭제하기 </button>
+                            </td>
+                        </tr>
+                    </table>`
+
+                    document.querySelector(".boardbox").innerHTML = html;
+    }
+
+    })
+}
+
+function b_del(bno){
+    $.ajax({
+    url:"/board/b_del",
+    method:"delete",
+    data:{"bno":bno},
+    success:(r)=>{
+        if(r==true){alert('삭제완료 ! '); myboards();
+        document.querySelector(".boardbox").innerHTML =""
+        }
+        else{alert('오류! ')}
+        }
+     })
+}
+
 /*
     해당 변수의 자료형 확인 Prototype
     Array: forEach() 가능

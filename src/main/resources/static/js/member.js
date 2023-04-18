@@ -27,7 +27,7 @@ function onSignup(){
 function onLogin(){
     let loginForm = document.querySelectorAll('.loginForm')[0];
     let loginFormData = new FormData(loginForm);
-    console.log(loginFormData)
+
     $.ajax({
         url: "/member/login",
         method:'POST',
@@ -36,6 +36,7 @@ function onLogin(){
         processData:false,
         success : (r)=>{
            console.log(r);
+
         }
     })
 
