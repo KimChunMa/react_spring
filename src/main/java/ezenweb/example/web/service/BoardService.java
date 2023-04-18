@@ -103,23 +103,28 @@ public class BoardService {
     }
 
     //4. 카테고리별  게시물 출력
+    @Transactional
     public List<BoardDto> list(int cno){
         log.info("list cno : "+cno);
-        List<BoardEntity> boardEntityList;
-        Optional<CategoryEntity> categoryEntityOptional;
+        List<BoardDto> list = new ArrayList<>();
         if(cno == 0){ // 카테고리 정보 전체 출력
-            List<BoardDto> list = new ArrayList<>();
 
-            boardEntityList = boardEntityRepository.findAll();
+
+            List<BoardEntity>  boardEntityList = boardEntityRepository.findAll();
             boardEntityList.forEach((e)->{
                 list.add(e.toDto());
             });
-            return list;
+
         }else{ // 해당 cno의 카테고리 정보 전체 출력
-            categoryEntityOptional = categoryEntityRepository.findById(cno);
+            Optional<CategoryEntity> categoryEntityOptional = categoryEntityRepository.findById(cno);
+            if(categoryEntityOptional.isPresent()){
+                categoryEntityOptional.get().getBorderEntityList().forEach((e) ->{
+                    list.add(e.toDto());
+                });
+            }
         }
 
-        return null;
+        return list;
     }
 
     //3. 내가 쓴 게시물 출력
