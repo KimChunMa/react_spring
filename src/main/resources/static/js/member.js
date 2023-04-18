@@ -76,8 +76,8 @@ function getMember(){
                 if(memberInfo.mno !=null){
                     document.querySelector('.nickname').innerHTML = r.mname +'님';
                     document.querySelector('.logout').innerHTML =
-                    `<a href="/member/logout"><button type="button"> 로그아웃 </button></a>`
-
+                    `<a href="/member/logout"><button type="button"> 로그아웃 </button></a>
+                    <a href="/board"><button type="button"> 게시물 보기 </button></a>`
                 }
             }
         })

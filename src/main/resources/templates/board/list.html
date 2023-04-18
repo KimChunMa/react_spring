@@ -7,6 +7,8 @@
 <body>
 
 <div>
+    <a href="/">메인페이지로 </a>
+
     <div>
         <input type="text" class="cname"> </br>
         <button onclick="setCategory()" type="button"> 카테고리 등록 </button>
@@ -14,6 +16,18 @@
     <div>
         <h6> 카테고리 목록 </h6>
         <div class="categorylistbox"></div>
+    </div>
+
+    <div>
+        <h6> 게시물 쓰기 </h6>
+        제목 : <input type="text" class="btitle">
+        내용 : <input type="text" class="bcontent">
+        <button onclick="setBoard()" type="button">게시물 등록</button>
+    </div>
+
+    <div>
+        <h6> 게시물 목록 </h6>
+        <table class="boardlistbox"></table>
     </div>
 
 </div>

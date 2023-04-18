@@ -30,7 +30,6 @@ public class BoardService {
 
     //1. 카테고리 등록
     @Transactional
-    @PostMapping("/category/write")
     public boolean categoryWrite(BoardDto boardDto){
         CategoryEntity entity =
                 categoryEntityRepository.save(boardDto.toCategoryEntity());
@@ -38,9 +37,8 @@ public class BoardService {
         return false;
     }
 
-    //1. 카테고리 출력
+    //2. 카테고리 출력
     @Transactional
-    @PostMapping("/category/write")
     public Map<Integer, String > categoryList(){
         List<CategoryEntity> categoryEntityList
                 = categoryEntityRepository.findAll();
@@ -56,15 +54,18 @@ public class BoardService {
 
 
 
-    //2. 게시물 쓰기
+    //3. 게시물 쓰기
     @Transactional
     @PostMapping("/write")
-    public Boolean write(BoardDto boardDto){
+    public byte write(BoardDto boardDto){
+        System.out.println("-----------------------------------");
+        log.info("s board dto : " + boardDto );
+
         // 1. 선택된 카테고리 번호를 이용한 카테고리 엔티티 찾기
         Optional<CategoryEntity> entity =
                 categoryEntityRepository.findById(boardDto.getCno());
         //2. 만약 선택된 카테고리가 존재하지 않으면 리턴
-        if(!entity.isPresent()){return false;}
+        if(!entity.isPresent()){return 1;}
         //3. 카테고리 엔티티 추출
         CategoryEntity categoryEntity = entity.get();
 
@@ -72,7 +73,7 @@ public class BoardService {
         //1. 인증된 인증 정보 찾기
         Object o =
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(o.equals("anonymousUser")){return false;}
+        if(o.equals("anonymousUser")){return 2;}
         //2. 형변환
         MemberDto loginDto = (MemberDto)o;
         //3. 회원 엔티티 찾기
@@ -82,7 +83,7 @@ public class BoardService {
         //4. 게시물 쓰기
         BoardEntity boardEntity =
                 boardEntityRepository.save(boardDto.toBoardEntity());
-        if(boardEntity.getBno() <1){return false;}
+        if(boardEntity.getBno() <1){return 3;}
 
         //5. 양방향
             //1. 카테고리 엔티티에 생성된 게시물 등록
@@ -96,8 +97,9 @@ public class BoardService {
         memberEntity.getBoardEntityList().add(boardEntity);
 
         // ----- 내가쓴글
-        log.info(boardEntity.toString());
-        return false;
+        Optional<CategoryEntity> optionalCategory =  categoryEntityRepository.findById( 2 );
+        log.info( "공지사항 엔티티 확인 :" + optionalCategory.get()  );
+        return 4;
     }
 
     //3. 내가 쓴 게시물 출력

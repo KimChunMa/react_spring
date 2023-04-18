@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/admin/**") // localohst:8080/admin/ ~~ 이하 페이지 막기
                     .hasRole("admin")
-                .antMatchers("/board/write")
+                .antMatchers("/board/**")
                     .hasRole("user")
                 .antMatchers("/**") // localhost:8080 ~ 이하 페이지는 권한 해제
                     .permitAll()//권한 해제
@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .ignoringAntMatchers("/member/mdelete")
                         .ignoringAntMatchers("/member/mupdate")
                         .ignoringAntMatchers("/board/category/write")
-                        .ignoringAntMatchers("/board/category/write")
+                        .ignoringAntMatchers("/board/write")
 
 
                 .and() // 기능 추가/구분 할때 사용되는 메소드

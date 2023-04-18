@@ -49,12 +49,11 @@ public class BoardController {
 
 
 
-    //2. 게시물 쓰기
-    @PostMapping("/write")
-    public Boolean write(@RequestBody BoardDto boardDto){
-        log.info("board " + boardDto);
-        boolean result = boardService.write(boardDto);
-        return false;
+    //3. 게시물 쓰기 //body {"btitle":"제목", "bcontent": "내 용" , "cno":"번호" }
+    @PostMapping("/write") //요청한 json필드명과 dto 필드명 일치시 자동 매핑
+    public byte write( @RequestBody BoardDto boardDto ){ log.info("c board dto : " + boardDto );
+        byte result = boardService.write( boardDto );
+        return result;
     }
 
     //3. 내가 쓴 게시물 출력

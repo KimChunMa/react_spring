@@ -1,7 +1,9 @@
 package ezenweb.example.web.domain.border;
 
+import ezenweb.example.web.domain.BaseTime;
 import ezenweb.example.web.domain.member.MemberEntity;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class BoardEntity {
+public class BoardEntity extends BaseTime {
 
     @Id // pk
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +23,15 @@ public class BoardEntity {
     @Column
     private String btitle;
 
-    @Column
+    @Column(columnDefinition = "longtext") //mysql text자료형 선택
     private String bcontent;
+
+    @Column
+    @ColumnDefault("0") //필드 초기값
+    private int bview; // 조회수
+
+    //작성일, 수정일
+
 
     //FK = 외래키
     //카테고리 번호
@@ -37,6 +46,8 @@ public class BoardEntity {
     @ToString.Exclude //tostring
     private MemberEntity memberEntity;
 
+
+    // pk =양방향 [해당 댓글 엔티티의 fk 필드와 매핑]
     //댓글 목록
     @OneToMany(mappedBy = "boardEntity")
     @Builder.Default

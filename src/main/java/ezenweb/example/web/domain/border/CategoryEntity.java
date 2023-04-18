@@ -1,5 +1,6 @@
 package ezenweb.example.web.domain.border;
 
+import ezenweb.example.web.domain.BaseTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity@Table(name="bcategory")
 @Data@NoArgsConstructor@AllArgsConstructor
 @Builder
-public class CategoryEntity {
+public class CategoryEntity extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cno ;
