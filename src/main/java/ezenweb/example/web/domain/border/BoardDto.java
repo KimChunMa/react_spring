@@ -16,6 +16,12 @@ public class BoardDto {
         private int cno;
         private String cname;
 
+        //추가
+        private int mno;
+        private String memail;
+        private int bview;
+        private String bdate;
+
         //Entity 변환 메소드
         // 1. toSaveCategoryEntity
         public CategoryEntity toCategoryEntity(){

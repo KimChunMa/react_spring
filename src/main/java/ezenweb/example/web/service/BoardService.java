@@ -11,12 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -96,14 +94,35 @@ public class BoardService {
         //2. 로그인된 회원 엔티티에 게시물 넣기
         memberEntity.getBoardEntityList().add(boardEntity);
 
-        // ----- 내가쓴글
+        // 공지사항 게시물 정보 확인
+        /*
         Optional<CategoryEntity> optionalCategory =  categoryEntityRepository.findById( 2 );
         log.info( "공지사항 엔티티 확인 :" + optionalCategory.get()  );
+        */
         return 4;
     }
 
+    //4. 카테고리별  게시물 출력
+    public List<BoardDto> list(int cno){
+        log.info("list cno : "+cno);
+        List<BoardEntity> boardEntityList;
+        Optional<CategoryEntity> categoryEntityOptional;
+        if(cno == 0){ // 카테고리 정보 전체 출력
+            List<BoardDto> list = new ArrayList<>();
+
+            boardEntityList = boardEntityRepository.findAll();
+            boardEntityList.forEach((e)->{
+                list.add(e.toDto());
+            });
+            return list;
+        }else{ // 해당 cno의 카테고리 정보 전체 출력
+            categoryEntityOptional = categoryEntityRepository.findById(cno);
+        }
+
+        return null;
+    }
+
     //3. 내가 쓴 게시물 출력
-    @GetMapping("/myboards")
     public List<BoardDto> myboards(){
 
         return null;

@@ -6,6 +6,8 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +55,29 @@ public class BoardEntity extends BaseTime {
     @Builder.Default
     private List<ReplyEntity> replyEntities = new ArrayList<>();
 
+    public BoardDto toDto(){
+        return BoardDto.builder()
+                .bno(this.bno)
+                .btitle(this.btitle)
+                .bcontent(this.bcontent)
+                .cno(this.getCategoryEntity().getCno())
+                .cname(this.getCategoryEntity().getCname())
+                .mno(this.getMemberEntity().getMno())
+                .memail((this.getMemberEntity().getMemail()))
+                .bview(this.bview)
+                //날짜 형변환
+                .bdate(
+                        //만약 작성 날짜/시간중 날짜가 현재 날짜와 동일하다면
+                        this.cdate.toLocalDate().toString().equals(LocalDateTime.now().toLocalDate().toString()) ?
+                        this.cdate.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")) :
+                        this.cdate.toLocalDate().format(DateTimeFormatter.ofPattern("yy-MM-DD") )
+
+
+                )
+
+
+                .build();
+    }
 
 
 }

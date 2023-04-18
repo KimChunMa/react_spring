@@ -21,7 +21,7 @@ function getCategory(){
         success:(r)=>{
             console.log(r);
 
-            let html = `<button onclick="selectCno(0)" type="button"> 전체보기 </button>`;
+            let html = `<button onclick="selectorCno(0)" type="button"> 전체보기 </button>`;
 
             for(let cno in r){
                 console.log("필드명/키 : " + cno);
@@ -38,6 +38,7 @@ let selectCno = 0; // 선택한 카테고리 번호 [기본값 = 0]
 function selectorCno(cno){
     console.log(cno + " 의 카테고리 선택");
     selectCno = cno;
+     getBoard(cno)
 }
 
 //4. 게시물 쓰기
@@ -69,7 +70,16 @@ function setBoard(){
 
 
 //5. 게시물 출력
+getBoard(0);
 function getBoard(cno){
+    selectCno = cno;
+
+    $.ajax({
+        url:"/board/list", method:"get", data:{"cno":selectCno},
+        success:(r)=>{
+            console.log(r);
+        }
+    })
 }
 /*
     해당 변수의 자료형 확인 Prototype
