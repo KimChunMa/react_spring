@@ -77,6 +77,7 @@ setInterval( ()=> {
     );
 },1000);
 */
+
 /*
 
  root.render(
@@ -84,6 +85,7 @@ setInterval( ()=> {
             <CommentList/>
         </React.StrictMode>
     );
+
 */
 
  root.render(
