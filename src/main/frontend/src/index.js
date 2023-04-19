@@ -12,6 +12,8 @@ import Clock from './example/ex1component/Clock';
 //------------------ ex2css ------------------------------//
 import Comment from './example/ex2css/Comment';
 import CommentList from './example/ex2css/CommentList';
+//------------------- exbook ------------------------------//
+import AppTodo from './example/exbook/AppTodo';
 
 //2.ReactDom.createRoot(해당 div ) : 해당 div를 리액트 root로 사용하여 root 객체 생성
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -75,12 +77,20 @@ setInterval( ()=> {
     );
 },1000);
 */
+/*
 
  root.render(
         <React.StrictMode>
             <CommentList/>
         </React.StrictMode>
     );
+*/
+
+ root.render(
+        <React.StrictMode>
+            <AppTodo/>
+        </React.StrictMode>
+ );
 
 
 // If you want to start measuring performance in your app, pass a function
