@@ -16,16 +16,39 @@ export default function AddTodo(props){
             console.log(item);
     }
 
+        //2. AppTodo에서 전달받은 addItem 함수
+        const addItem = props.addItem
+
+        //3. + 버튼 클릭시
+        const onButtonClick= () =>{
+            addItem(item);
+            setItem({title:""});
+        }
+
+        //4. 엔터를 입력했을 때
+        const enterKeyEventHandler = (e) => {
+            if(e.key === 'Enter'){
+            onButtonClick();
+            }
+        }
+
+
+
     return(<>
         <Grid container style={{marginTop:20}}>
             <Grid xs={11} md={11}  item style={{paddingRight:16}}>
                 <TextField placeholder="여기에 Todo작성" fullWidth
-                onChange={ onInputChange }/>
+                onChange={ onInputChange }   onKeyPress = {enterKeyEventHandler}/>
             </Grid>
 
             <Grid xs={1} md={1}>
-                <Button fullWidth style={{height : '100%'}}
-                color="secondary" variant="outlined">
+                <Button
+                fullWidth
+                style={{height : '100%'}}
+                color="secondary"
+                variant="outlined"
+                onClick={onButtonClick}
+                >
                 +
                 </Button>
             </Grid>

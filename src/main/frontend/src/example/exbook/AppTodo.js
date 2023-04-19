@@ -7,19 +7,17 @@ import {Paper, List, Container} from '@mui/material';
 export default function AppTodo(props){
 
     const [items, setItems] = useState(
-    [
-        {
-            id:"0",
-            title:"hello 1",
-            done : true
-        },
-        {
-            id:"1",
-            title:"hello 2",
-            done : false
-        }
-    ] // array e
+        [
+        ] // array e
     ) //useState e
+
+    //2. items 에 새로운 item 등록하는 함수
+    const addItem = (item) =>{ //함수로부터 매개변수 전달은 item
+        item.id = "ID-" + item.length //ID 구성
+        item.done = false; // 체크여부
+        setItems([...items,item]); //기존 상태items에 item 추가
+        //setItems([...기본배열, 값])
+    }
 
     let TodoItems =
         /* <Paper style="margin : 16px;">   HTML의 style 속성 방법 */
@@ -33,11 +31,13 @@ export default function AppTodo(props){
             </List>
         </Paper>
 
+
+
     return (<>
 
          <div className="App">
             <Container maxWidth="md">
-                <AddTodo/>
+                <AddTodo addItem={addItem}/>
                 { TodoItems }
             </Container>
          </div>
