@@ -1,21 +1,38 @@
 //교재 App컴포넌트 --> AppTodo 컴포넌트
 import styles from "../../App.css"
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
 import {Paper, List, Container} from '@mui/material';
+import axios from 'axios'; // npm install axios
 export default function AppTodo(props){
 
-    const [items, setItems] = useState(
+ const [items, setItems] = useState(
         [] // array e
     ) //useState e
+
+    //컴포넌트가 실행될때 한번 이벤트 발생
+    useEffect( () => {
+          // ajax : jquery 설치 가 필요
+          // fetch : 리액트 전송 비동기 통신 함수 [ 내장함수 - 설치 X ]
+          // axios : 리액트 외부 라이브러리 [ 설치 필요 ] JSON통신 기본값
+          axios.get( "http://localhost:8080/todo" )
+                     .then( r => {
+                         console.log( r );
+                         setItems( r.data ); // 서버에게 응답받은 리스트를 재렌더링
+                     })
+          // 해당 주소의 매핑되는 컨트롤/메소드 에 @CrossOrigin(origins = "http://localhost:3000") 추가
+          //axios.post( "http://localhost:8080/todo" , {mname: "유재석"}).then( r => { console.log( r ); })
+          //axios.put( "http://localhost:8080/todo" ).then( r => { console.log( r ); })
+          //axios.delete( "http://localhost:8080/todo", {params: {id:1 } } ).then( r => { console.log( r ); })
+       } , [] );
+
 
     //2. items 에 새로운 item 등록하는 함수
     const addItem1 = (item) =>{ //함수로부터 매개변수 전달은 item
         item.id = "ID-" + items.length //ID 구성 ??
         item.done = false; // 체크여부
         setItems([...items,item]); //기존 상태items에 item 추가
-
         //setItems([...기본배열, 값])
     }
 
@@ -40,7 +57,10 @@ export default function AppTodo(props){
                 // let array = r.filter( (o) => { o>=3});
                 //array = [3]
 
-
+    //4. 수정함수
+    const editItem = () => {
+        setItems([...items])
+    }
 
 
     //모든 Items 배열 순회
@@ -50,7 +70,8 @@ export default function AppTodo(props){
             <List>
                 {
                     items.map((i) =>
-                        <Todo item = {i} key = {i.id} 삭제함수={deleteItem}/>
+                        <Todo item = {i} key = {i.id}
+                        삭제함수={deleteItem} 수정함수 ={editItem}/>
                     )
                 }
             </List>
