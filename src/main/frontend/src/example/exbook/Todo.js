@@ -42,6 +42,7 @@ export default function Todo(props){
     const editEventHandler = (e)=>{ console.log("edit")
         item.title = e.target.value; // InputBase 변경될때마다 상태변수에 입력한 값 저장
         setItem(item);
+
         editItem();
     }
 

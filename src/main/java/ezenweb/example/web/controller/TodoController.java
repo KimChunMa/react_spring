@@ -1,7 +1,11 @@
 package ezenweb.example.web.controller;
 
 import ezenweb.example.web.domain.Todo.TodoDto;
+import ezenweb.example.web.domain.Todo.TodoEntity;
+import ezenweb.example.web.domain.Todo.TodoRepository;
+import ezenweb.example.web.domain.Todo.TodoService;
 import ezenweb.example.web.domain.member.MemberDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,34 +15,32 @@ import java.util.List;
 @RequestMapping("/todo")
 @CrossOrigin(origins = "http://localhost:3000") // 해당 컨트롤러는 http://localhost:3000 요청 CORS 정책 적용
 public class TodoController {
+
+    @Autowired
+    TodoRepository todoRepository;
+    @Autowired
+    TodoService service;
+
+    //모든 게시판 출력
     @GetMapping("")
-    public List<TodoDto> get(){ //dto, 서비스 ,리포지토리, 엔티티, 작업
-        //테스트 서비스에게 전달받은 과정
-
-        List<TodoDto> list = new ArrayList<>();
-        list.add(new TodoDto(1,"게시물1",true));
-        list.add(new TodoDto(2,"게시물1",true));
-        list.add(new TodoDto(3,"게시물1",true));
-
-
-
-        //과제 서비스 구현
-
-        return null;
+    public List<TodoDto> get(){
+        return service.get();
     }
 
     @PostMapping("")
-    public boolean post(@RequestBody MemberDto memberdto){
-        return true;
+    public boolean post(@RequestBody TodoDto dto){
+        return service.post(dto);
     }
 
     @PutMapping("")
-    public  boolean put(){
-        return true;
+    public  boolean put(@RequestBody TodoDto dto){
+        return service.put(dto);
     }
 
     @DeleteMapping("")
-    public  boolean delete( @RequestParam int id ){
-        return true;
+    public boolean delete( @RequestParam String iid ){
+        System.out.println("---------------------------------");
+        System.out.println("들어온 값"+iid);
+        return service.delete(iid);
     }
 }

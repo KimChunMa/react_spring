@@ -18,7 +18,7 @@ export default function AppTodo(props){
           // axios : 리액트 외부 라이브러리 [ 설치 필요 ] JSON통신 기본값
           axios.get( "http://localhost:8080/todo" )
                      .then( r => {
-                         console.log( r );
+                         console.log("들어온값"+ r );
                          setItems( r.data ); // 서버에게 응답받은 리스트를 재렌더링
                      })
           // 해당 주소의 매핑되는 컨트롤/메소드 에 @CrossOrigin(origins = "http://localhost:3000") 추가
@@ -28,20 +28,30 @@ export default function AppTodo(props){
        } , [] );
 
 
+
+
     //2. items 에 새로운 item 등록하는 함수
     const addItem1 = (item) =>{ //함수로부터 매개변수 전달은 item
-        item.id = "ID-" + items.length //ID 구성 ??
+        item.iid = "ID-" + items.length //ID 구성 ??
         item.done = false; // 체크여부
         setItems([...items,item]); //기존 상태items에 item 추가
+        console.log("배열목록"+items)
         //setItems([...기본배열, 값])
+        console.log("객체의 아이디 : "+item.iid);
+        console.log("객체 : "+item);
+        axios.post( "http://localhost:8080/todo", item )
+                    .then( r => {console.log("넣은값 : "+item.iid)})
     }
 
     //3. 삭제 기능
     const deleteItem= (item) => {
-        console.log(item.id)
+        console.log(item.iid);
         const newItems = items.filter( (e) => {return e.id !== item.id});
             //삭제할 id를 제외한 새로운 배열 선언
             setItems([...newItems]);
+            console.log(newItems);
+        axios.delete( "http://localhost:8080/todo", {params: {iid:item.iid}} )
+                                .then( r => {console.log("결과: " + r )})
     }
         //js 반복문 함수 제공
             // r = [1,2,3]
