@@ -13,15 +13,14 @@ export default function AddTodo(props){
            // console.log(e); //해당 이벤트가 발생했을때 이벤트 정보
            // console.log(e.target); // 해당이벤트 발생된 요소
         setItem({title:e.target.value}); // 상태변경: 입력받은 값 가져와서 상태변수를 수정
-            console.log(item);
-    }
+     }
 
         //2. AppTodo에서 전달받은 addItem 함수
-        const addItem = props.addItem
+        const addItem2 = props.addItem2
 
         //3. + 버튼 클릭시
         const onButtonClick= () =>{
-            addItem(item);
+            addItem2(item);
             setItem({title:""});
         }
 
