@@ -3,6 +3,7 @@ package ezenweb.example.web.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ezenweb.example.web.domain.member.MemberDto;
 import lombok.extern.apachecommons.CommonsLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -32,7 +33,8 @@ public class AuthSucessFailHandler implements AuthenticationSuccessHandler , Aut
         System.out.println("--------------------------------");
         log.info("authentication :"+authentication);
 
-        String json = objectMapper.writeValueAsString("성공");
+        MemberDto dto = (MemberDto) authentication.getPrincipal();
+        String json = objectMapper.writeValueAsString(true);
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType(("application/json"));
@@ -44,7 +46,7 @@ public class AuthSucessFailHandler implements AuthenticationSuccessHandler , Aut
         System.out.println("--------------------------------");
         log.info("authentication :"+exception.toString());
 
-        String json = objectMapper.writeValueAsString("실패");
+        String json = objectMapper.writeValueAsString(false);
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType(("application/json"));

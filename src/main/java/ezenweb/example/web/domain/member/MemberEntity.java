@@ -49,7 +49,7 @@ public class MemberEntity extends BaseTime{
                 .mno(this.mno) .memail(this.memail)
                 .mpw(this.mpw).mname(this.mname)
                 .mphone(this.mphone).mrole(this.mrole)
-                .cdate(this.cdate).udate(this.udate)
+                //.cdate(this.cdate).udate(this.udate)
                 .build();
     }
 }

@@ -3,12 +3,18 @@ package ezenweb.example.web.config;
 import ezenweb.example.web.controller.AuthSucessFailHandler;
 import ezenweb.example.web.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 
 @Configuration // 스프링 빈 등록 [MVC 컴포넌트]
@@ -86,6 +92,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .userInfoEndpoint() // 스프링 시큐리티로 들어올 수 있도록 시큐리티 로그인 엔드포인트[종착점]
                     .userService(memberService); // oauth2 서비스를 처리할 서비스 구현
 
+        http.cors(); // cors 정책 사용
+    }//configure e
 
+    //스프링 시큐리티에 cors 정책 설정 [리액트가 요청 ]
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("HEAD","GET","POST","PUT","DELETE") );
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type","Cache-COntrol","Authorization"));
+        corsConfiguration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**",corsConfiguration);
+        return source;
     }
-}
+
+
+}// class e

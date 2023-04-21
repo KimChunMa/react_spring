@@ -29,8 +29,8 @@ public class MemberDto implements UserDetails , OAuth2User {
     private Set<GrantedAuthority> 권한목록;
     private Map<String, Object> 소셜회원정보;
 
-    private LocalDateTime cdate;
-    private LocalDateTime udate;
+    private String cdate;
+    private String udate;
 
 
     public MemberEntity toEntity(){
