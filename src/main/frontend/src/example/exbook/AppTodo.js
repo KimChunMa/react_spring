@@ -32,25 +32,22 @@ export default function AppTodo(props){
 
     //2. items 에 새로운 item 등록하는 함수
     const addItem1 = (item) =>{ //함수로부터 매개변수 전달은 item
-        item.iid = "ID-" + items.length //ID 구성 ??
+        item.id = "ID-" + items.length //ID 구성 ??
         item.done = false; // 체크여부
         setItems([...items,item]); //기존 상태items에 item 추가
-        console.log("배열목록"+items)
         //setItems([...기본배열, 값])
-        console.log("객체의 아이디 : "+item.iid);
-        console.log("객체 : "+item);
         axios.post( "http://localhost:8080/todo", item )
-                    .then( r => {console.log("넣은값 : "+item.iid)})
+                    .then( r => {console.log("넣은값 : "+item.id)})
     }
 
     //3. 삭제 기능
     const deleteItem= (item) => {
-        console.log(item.iid);
+        console.log(item.id);
         const newItems = items.filter( (e) => {return e.id !== item.id});
             //삭제할 id를 제외한 새로운 배열 선언
             setItems([...newItems]);
             console.log(newItems);
-        axios.delete( "http://localhost:8080/todo", {params: {iid:item.iid}} )
+        axios.delete( "http://localhost:8080/todo", {params: {id:item.id}} )
                                 .then( r => {console.log("결과: " + r )})
     }
         //js 반복문 함수 제공

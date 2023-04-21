@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+import axios from 'axios'; // npm install axios
 import {ListItem, ListItemText, InputBase,
         Checkbox, ListItemSecondaryAction, IconButton} from '@mui/material';
 import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
@@ -42,7 +43,9 @@ export default function Todo(props){
     const editEventHandler = (e)=>{ console.log("edit")
         item.title = e.target.value; // InputBase 변경될때마다 상태변수에 입력한 값 저장
         setItem(item);
-
+        console.log(item)
+        axios.put( "http://localhost:8080/todo", item )
+                                        .then( r => {console.log("결과: " + r )})
         editItem();
     }
 

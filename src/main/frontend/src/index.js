@@ -17,6 +17,8 @@ import AppTodo from './example/exbook/AppTodo';
 //------------------- Hook ------------------------------//
 import Hook1 from './example/ex3hook/Hook1';
 import Hook2 from './example/ex3hook/Hook2';
+//------------------- component------------------------------//
+import Index from './component/Index';
 
 //2.ReactDom.createRoot(해당 div ) : 해당 div를 리액트 root로 사용하여 root 객체 생성
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -91,11 +93,11 @@ setInterval( ()=> {
 
 */
 
- root.render(
+/* root.render(
         <React.StrictMode>
             <AppTodo/>
         </React.StrictMode>
- );
+ );*/
 
 /*
 
@@ -116,6 +118,11 @@ root.render(
  );
 */
 
+root.render(
+        <React.StrictMode>
+            <Index/>
+        </React.StrictMode>
+)
 
 
 // If you want to start measuring performance in your app, pass a function

@@ -13,12 +13,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity@Table(name="todo")
 public class TodoEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int todoId;
 
-    @Column
-    private String iid; //식별번호
+    @Id
+    private String id; //식별번호
     @Column
     private String title; //제목
     @Column
@@ -26,8 +23,7 @@ public class TodoEntity {
 
     public TodoDto toDto(){
         return TodoDto.builder()
-                .todoId(this.todoId)
-                .iid(this.iid)
+                .id(this.id)
                 .title(this.title)
                 .done(this.done)
                 .build();

@@ -1,5 +1,6 @@
 package ezenweb.example.web.domain.Todo;
 
+import ezenweb.example.Day04.domain.entity.product.ProductEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,18 +35,24 @@ public class TodoService {
     }
 
     //2. 등록
+    @Transactional
     public boolean post(TodoDto dto){
         todoRepository.save( dto.toEntity());
         return true;
     }
 
     //3. 수정
+    @Transactional
     public boolean put(TodoDto dto){
-        TodoEntity entity =
-                todoRepository.findByiid(dto.getIid());
 
-        if(entity != null){
+        Optional<TodoEntity> optionalTodoEntity =
+                todoRepository.findById(dto.getId());
+
+        if(optionalTodoEntity.isPresent()){
+            TodoEntity entity = optionalTodoEntity.get();
+            System.out.println(entity);
            entity.setTitle( dto.getTitle());
+            System.out.println(entity);
            return true;
         }
 
@@ -53,11 +60,11 @@ public class TodoService {
     }
 
     //4. 삭제
-    public boolean delete( String iid ){
+    @Transactional
+    public boolean delete( String id ){
         //1. 일치하는 ID 찾고
-        System.out.println("-------------------------------");
-        System.out.println(iid);
-        TodoEntity todoEntity = todoRepository.findByiid(iid);
+        System.out.println(id);
+        TodoEntity todoEntity = todoRepository.findById(id).get();
         System.out.println(todoEntity);
         if(todoEntity != null){ //2. 찾으면 삭제
             todoRepository.delete(todoEntity);

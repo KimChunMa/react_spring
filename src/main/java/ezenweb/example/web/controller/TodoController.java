@@ -38,9 +38,9 @@ public class TodoController {
     }
 
     @DeleteMapping("")
-    public boolean delete( @RequestParam String iid ){
+    public boolean delete( @RequestParam String id ){
         System.out.println("---------------------------------");
-        System.out.println("들어온 값"+iid);
-        return service.delete(iid);
+        System.out.println("들어온 값"+id);
+        return service.delete(id);
     }
 }

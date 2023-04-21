@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 public class MemberController {
 
+    //T서버사이드 라이팅 : 클라이언트가 HTML요청하는 방식 [리액트일경우사용 X ]
     //회원가입창 이동
     @GetMapping("/signup")
     public Resource getSignup(){

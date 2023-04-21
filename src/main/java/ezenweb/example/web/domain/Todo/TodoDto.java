@@ -10,15 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TodoDto {
-    private int todoId;
-    private String iid; //식별번호
+    private String id; //식별번호
     private String title; //제목
     private boolean done; //  체크여부
 
     public TodoEntity toEntity(){
         return TodoEntity.builder()
-                .todoId(this.todoId)
-                .iid(this.iid)
+                .id(this.id)
                 .title(this.title)
                 .done(this.done)
                 .build();

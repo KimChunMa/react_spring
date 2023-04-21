@@ -36,7 +36,7 @@ public class ProductService {
 
         if(optionalProductEntity.isPresent()){
             ProductEntity entity = optionalProductEntity.get();
-            entity.setPcontent((dto.getPcontent() ));
+            entity.setPcontent(dto.getPcontent() );
             return true;
         }
         return false;
