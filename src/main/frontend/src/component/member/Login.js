@@ -14,7 +14,15 @@ export default function Login(props){
                 alert('실패')
             }else{
                 alert('성공')
+                console.log(r)
+                // 브라우저 닫혀도 사라지지않지만 도메인이 달라지면 사라짐
                 // 로컬 스토리지에 로그인 성공한 흔적 남기기
+                //localStorage.setItem("key",value); // String 타입
+                //value 에 객체 대입시 [Object] 객체처럼 사용불가
+                // localStorage.setItem("login_token" , JSON.stringify( r.data ) );
+                //JS 세션 스토리지 [브라우저 모두 닫히면 사라짐.]
+                sessionStorage.setItem("login_token" , JSON.stringify( r.data ) );
+
                 window.location.href="/";
             }
          })

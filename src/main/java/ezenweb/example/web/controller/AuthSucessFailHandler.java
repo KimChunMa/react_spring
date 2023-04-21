@@ -34,7 +34,7 @@ public class AuthSucessFailHandler implements AuthenticationSuccessHandler , Aut
         log.info("authentication :"+authentication);
 
         MemberDto dto = (MemberDto) authentication.getPrincipal();
-        String json = objectMapper.writeValueAsString(true);
+        String json = objectMapper.writeValueAsString(dto);
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType(("application/json"));
