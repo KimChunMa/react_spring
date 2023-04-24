@@ -1,4 +1,4 @@
- import React from 'react';
+ import React, {useState} from 'react';
  import axios from 'axios';
 
  export default function Signup(props){
@@ -24,11 +24,29 @@
             .catch(err => {console.log(err)});
     }
 
+    //2. 아이디 중복 체크
+    let [memailMsg, setMemailMsg] = useState('');
+    const idCheck = (e) => {
+        //1
+        // console.log(document.querySelector('.memail').value);
+        // console.log(e.target.value)
+
+        axios.get("http://localhost:8080/member/idcheck", {params: {memail: e.target.value}})
+        .then(res =>{
+            if(res.data == true ) {setMemailMsg('불가능')}
+            else{setMemailMsg('사용가능')}
+            }
+        ).catch(e =>  console.log('오류 : '+ e));
+    }
+
      return (<div>
       <h3> 회원가입 </h3>
 
       <form >
-        아이디[이메일] : <input type="text" class="memail"/> <br/>
+        아이디[이메일] : <input type="text" class="memail" onChange={idCheck}/>
+        <span>{memailMsg} </span>
+        <br/>
+
         비밀번호 :  <input type="text" class="mpw"/> <br/>
         전화번호 :  <input type="text" class="mphone"/> <br/>
         이름 :  <input type="text" class="mname"/> <br/>

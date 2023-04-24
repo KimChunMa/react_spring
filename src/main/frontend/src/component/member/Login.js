@@ -22,6 +22,7 @@ export default function Login(props){
                 // localStorage.setItem("login_token" , JSON.stringify( r.data ) );
                 //JS 세션 스토리지 [브라우저 모두 닫히면 사라짐.]
                 sessionStorage.setItem("login_token" , JSON.stringify( r.data ) );
+                //window.localStorage.removeItem("login_token");
 
                 window.location.href="/";
             }
@@ -37,6 +38,7 @@ export default function Login(props){
             아이디 :  <input type="text" name="memail" /> <br/>
             비밀번호 :  <input type="text" name="mpw" /> <br/>
             <button onClick={onLogin} type="button"> 로그인 버튼 </button>
+            <a href="/member/find"> 아이디 찾기 </a>
             <a href="/oauth2/authorization/google"> 구글 로그인 </a>
             <a href="/oauth2/authorization/kakao"> 카카오 로그인 </a>
             <a href="/oauth2/authorization/naver"> 네이버 로그인 </a>

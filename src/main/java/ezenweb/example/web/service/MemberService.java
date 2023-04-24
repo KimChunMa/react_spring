@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -218,15 +219,26 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         return false;
     }
 
+    //5. 아이디 중복 체크
+    public boolean idcheck( String memail){
+        return memberEntityRepository.existsByMemail(memail);
+    }
+
 
 
     // ------------------ 과제 -----------------------
 
     //5.이름+전화번호 일치시 이메일 알려주기
     public String findId(String mname, String mphone){
+        System.out.println("--------------------------------");
+        System.out.println("매개변수 : " + mname +" , "+ mphone);
+        System.out.println("-------------------------------");
+        System.out.println(memberEntityRepository.findByMnameAndMphone(mname,mphone));
         Optional<MemberEntity> entityOptional =
                 memberEntityRepository.findByMnameAndMphone(mname,mphone);
         if(entityOptional.isPresent()){
+            System.out.println("-------------");
+            System.out.println( entityOptional.get().getMemail());
             return entityOptional.get().getMemail();
         }
         return null;

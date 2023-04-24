@@ -5,6 +5,8 @@ export default function Header(props){
 
     let [ login , setLogin] = useState( JSON.parse( sessionStorage.getItem("login_token") ) );
 
+    console.log(login);
+
     //로그아웃
     const logOut = () => {
         sessionStorage.setItem("login_token",null);
@@ -19,10 +21,16 @@ export default function Header(props){
     return (
     <div>
         <a href="/"> Home </a>
+        <a href="/board/list"> 게시판 </a>
         { login == null
             ?
-            ( <> <a href="/login"> 로그인 </a>
-            <a href="/signup"> 회원가입 </a> </> )
-        : (<> <button onClick={logOut}> 로그아웃 </button> </>) }
+            ( <>
+                <a href="/login"> 로그인 </a>
+                <a href="/signup"> 회원가입 </a>
+                <a href="/member/find"> 아이디 찾기 </a>
+            </> )
+        : (<>
+                <button onClick={logOut}> 로그아웃 </button>
+          </>) }
     </div>)
     }

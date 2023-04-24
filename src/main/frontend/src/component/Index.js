@@ -5,6 +5,8 @@
  import Main from "./Main"
  import Footer from "./Footer"
  import Signup from "./Signup"
+ import Find from "./member/Find"
+ import List from "./board/List"
 
 /*
     react-router-dom 다양한 라우터 컴포넌트 제공
@@ -20,10 +22,11 @@
      <BrowserRouter>
         <Header/>
         <Routes>
-
             <Route path="/" element = { <Main/> } />
             <Route path="login" element = { <Login/> } />
             <Route path="signup" element = { <Signup/> } />
+            <Route path="/member/find" element = { <Find/> } />
+            <Route path="/board/list" element = { <List/> } />
         </Routes>
         <Footer/>
      </BrowserRouter>

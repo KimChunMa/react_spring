@@ -109,7 +109,13 @@ public class MemberController {
         return true;
     }
 
-
+    //아이디 중복 체크
+    @GetMapping("/idcheck")
+    public boolean idcheck(@RequestParam String memail){
+        System.out.println("--------------------");
+        System.out.println(memail);
+        return mservice.idcheck(memail);
+    }
 
 /*
     //------------------- 스프링 시큐리티 사용 -------------------
