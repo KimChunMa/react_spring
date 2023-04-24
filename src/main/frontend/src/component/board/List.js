@@ -10,20 +10,39 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 /* ---------------------------*/
 import Container from '@mui/material/Container';
+import CategoryList from './CategoryList'
 
 export default function List(props){
 
       // 1. 요청한 게시물 정보를 가지고 있는 리스트 변수[ 상태 관리변수 ]
       let [ rows , setRows ] = useState( [] )
+      //1-2. 카테고리
+      let [cno,setCno] = useState(0)
+
       // 2. 서버에게 요청하기 [ 컴포넌트가 처음 생성 되었을때 ] // useEffect( ()=>{} , [] )
       useEffect( ()=>{
-          axios.get('http://localhost:8080/board/list',{ params : { cno : 0 } })
-              .then( r => { console.log(r); setRows( r.data ) } )
+          axios.get('http://localhost:8080/board/list',{ params : { cno : cno } })
+              .then( r => {  setRows( r.data ) } )
               .catch( err => { console.log(err); })
-      } , [] )
+      } , [cno] ) // cno 변경 될때마다 해당 useEffect 실행된다.
+
+      // useEffect ( ()=> {} ) : 생성, 업데이트
+      // useEffect ( ()=> {},[] ) : 생성될때 1번
+      // useEffect ( ()=> {}, [변수] ) : 생성, 업데이트 될때마다 새렌더링
+
+    //3. 카테고리 변경
+    const categoryChange = (cno) => {
+        alert('List 컴포넌트에서 이벤트 발생 : ' + cno)
+        setCno(cno);
+    }
 
     return (
+
       <Container>
+        <div style={{display:'flex' , justifyContent:'space-between' , alignItems:'center' }}>
+            <a href="/board/write"> 글쓰기 </a>
+            <CategoryList categoryChange={categoryChange}/>
+        </div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>

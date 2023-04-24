@@ -2,6 +2,7 @@ package ezenweb.example.web.controller;
 
 import ezenweb.example.web.domain.border.BoardDto;
 import ezenweb.example.web.domain.border.BoardEntity;
+import ezenweb.example.web.domain.border.CategoryDto;
 import ezenweb.example.web.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.apache.bcel.classfile.ClassParser;
@@ -34,18 +35,20 @@ public class BoardController {
     //1. 카테고리 등록
     @PostMapping("/category/write")
     public Boolean categoryWrite(@RequestBody BoardDto boardDto){
-        boolean result = boardService.categoryWrite(boardDto);
-        return true;
+        System.out.println("-----------------");
+        System.out.println(boardService.categoryWrite(boardDto));
+        return boardService.categoryWrite(boardDto);
     }
 
     //2. 카테고리 출력 [반환 타입 : {1 : 공지사항 , 2 : 자유게시판}]
         //List : {값, 값, 값, 값}
         //Map {키:값 , 키:값, 키:값}
     @GetMapping("/category/list")
-    public Map<Integer, String > categoryList(){
+    public List<CategoryDto> categoryList(){
         log.info("c board Dto : ");
-        Map<Integer,String > result = boardService. categoryList();
-        return result;
+        System.out.println("-----------");
+        System.out.println(boardService.categoryList());
+        return  boardService.categoryList();
     }
 
 
@@ -62,8 +65,6 @@ public class BoardController {
     public List<BoardDto> list(@RequestParam int cno){
         log.info("list cno : "+cno);
         List<BoardDto> result = boardService.list(cno);
-        System.out.println("----------");
-        System.out.println(result);
         return result;
     }
 
