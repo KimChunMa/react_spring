@@ -15,6 +15,8 @@ public interface MemberEntityRepository
         //sql : select * from member where memail
     MemberEntity findByMemail(String memail);
 
+    boolean existsByMphone(String mphone);
+
     //2. 해당 이메일과 비밀번호가 일치한 엔티티 여부
     //sql : select * from member where memail =? and Mpw =?
     Optional<MemberEntity> findByMemailAndMpw( String memail , String mpw);

@@ -39,6 +39,19 @@
         ).catch(e =>  console.log('오류 : '+ e));
     }
 
+        //2. 전화번호 중복 체크
+        let [MphoneMsg, setMphone] = useState('');
+        const mphoneCheck = (e) => {
+            console.log(e.target.value)
+            axios.get("http://localhost:8080/member/phoneCheck", {params: {mphone: e.target.value}})
+            .then(r =>{
+                console.log(r)
+                if(r.data == true ) {setMphone('불가능')}
+                else{setMphone('사용가능')}
+                }
+            ).catch(e =>  console.log('오류 : '+ e));
+        }
+
      return (<div>
       <h3> 회원가입 </h3>
 
@@ -46,9 +59,8 @@
         아이디[이메일] : <input type="text" class="memail" onChange={idCheck}/>
         <span>{memailMsg} </span>
         <br/>
-
-        비밀번호 :  <input type="text" class="mpw"/> <br/>
-        전화번호 :  <input type="text" class="mphone"/> <br/>
+        비밀번호 :  <input type="text" class="mpw"  />    <br/>
+        전화번호 :  <input type="text" class="mphone" onChange={mphoneCheck}/>  <span>{MphoneMsg} </span> <br/>
         이름 :  <input type="text" class="mname"/> <br/>
            <button onClick={ onSignup } type="button"> 가입 </button>
       </form>

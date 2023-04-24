@@ -117,6 +117,12 @@ public class MemberController {
         return mservice.idcheck(memail);
     }
 
+    //전화번호 중복 체크
+    @GetMapping("/phoneCheck")
+    public boolean phoneCheck(@RequestParam String mphone){
+        return mservice.phoneCheck(mphone);
+    }
+
 /*
     //------------------- 스프링 시큐리티 사용 -------------------
     @PostMapping("/login")

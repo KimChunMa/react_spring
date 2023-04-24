@@ -224,6 +224,11 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         return memberEntityRepository.existsByMemail(memail);
     }
 
+    //6. 전화번호 체크
+    public boolean phoneCheck(@RequestParam String mphone){
+        return memberEntityRepository.existsByMphone(mphone);
+    }
+
 
 
     // ------------------ 과제 -----------------------
