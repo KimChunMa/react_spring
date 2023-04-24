@@ -6,6 +6,7 @@
  import Footer from "./Footer"
  import Signup from "./Signup"
  import Find from "./member/Find"
+ import FindPw from "./member/FindPw"
  import List from "./board/List"
  import DashBoard from "./admin/DashBoard"
  import Write from "./board/write"
@@ -28,9 +29,11 @@
             <Route path="login" element = { <Login/> } />
             <Route path="signup" element = { <Signup/> } />
             <Route path="/member/find" element = { <Find/> } />
+            <Route path="/member/findPw" element = { <FindPw/> } />
             <Route path="/board/list" element = { <List/> } />
             <Route path="/admin/dashBoard" element = { <DashBoard/> } />
             <Route path="/board/write" element = { <Write/> } />
+
         </Routes>
         <Footer/>
      </BrowserRouter>

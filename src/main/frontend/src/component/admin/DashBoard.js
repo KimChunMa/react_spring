@@ -8,7 +8,7 @@ export default function DashBoard( props ) {
         console.log(cname);
         axios.post('http://localhost:8080/board/category/write', { "cname" : cname.value })
             .then( (r)=> {
-                if(r == true){ alert('카테고리 등록성공'); cname.value = '' }
+                if(r.data == true){ alert('카테고리 등록성공'); cname.value = '' }
             })
     }
     return (

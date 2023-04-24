@@ -45,8 +45,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .hasRole("user") // 위 URL 패턴에 요청할수 있는 권한명
                 .antMatchers("/admin/**") // localohst:8080/admin/ ~~ 이하 페이지 막기
                     .hasRole("admin")
-                .antMatchers("/board/write") // 게시물 쓰기는 회원만 가능
-                    .hasRole("user")
+               // .antMatchers("/board/write") // 게시물 쓰기는 회원만 가능
+                 //   .hasRole("user")
                 .antMatchers("/**") // localhost:8080 ~ 이하 페이지는 권한 해제
                     .permitAll()//권한 해제
 

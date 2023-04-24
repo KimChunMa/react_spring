@@ -54,7 +54,6 @@ public class BoardService {
     @Transactional
     @PostMapping("/write")
     public byte write(BoardDto boardDto){
-        System.out.println("-----------------------------------");
         log.info("s board dto : " + boardDto );
 
         // 1. 선택된 카테고리 번호를 이용한 카테고리 엔티티 찾기

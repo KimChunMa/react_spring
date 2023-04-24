@@ -35,8 +35,6 @@ public class BoardController {
     //1. 카테고리 등록
     @PostMapping("/category/write")
     public Boolean categoryWrite(@RequestBody BoardDto boardDto){
-        System.out.println("-----------------");
-        System.out.println(boardService.categoryWrite(boardDto));
         return boardService.categoryWrite(boardDto);
     }
 
@@ -45,8 +43,6 @@ public class BoardController {
         //Map {키:값 , 키:값, 키:값}
     @GetMapping("/category/list")
     public List<CategoryDto> categoryList(){
-        log.info("c board Dto : ");
-        System.out.println("-----------");
         System.out.println(boardService.categoryList());
         return  boardService.categoryList();
     }

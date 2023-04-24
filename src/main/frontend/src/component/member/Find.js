@@ -4,7 +4,6 @@ import axios from 'axios';
  export default function Find(props){
 
     const findId = () => {
-
         let info = {
                "mname":document.querySelector('.mname').value ,
                "mphone":document.querySelector('.mphone').value

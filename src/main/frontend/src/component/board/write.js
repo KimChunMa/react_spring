@@ -15,8 +15,6 @@ export default function Write( props ) {
                 bcontent : document.querySelector("#bcontent").value ,
                 cno : 1
             }
-            console.log(info);
-
             axios.post('http://localhost:8080/board/write', info)
                 .then(r=>{console.log(r); })
     }
