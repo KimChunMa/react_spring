@@ -17,6 +17,7 @@ import java.util.Map;
 @RestController // @Controller + @ResponseBody(메소드위에 하나하나 써야됨 )
 @Slf4j
 @RequestMapping("/board")
+@CrossOrigin( origins = "http://localhost:3000")
 public class BoardController {
 
     @Autowired
@@ -61,6 +62,8 @@ public class BoardController {
     public List<BoardDto> list(@RequestParam int cno){
         log.info("list cno : "+cno);
         List<BoardDto> result = boardService.list(cno);
+        System.out.println("----------");
+        System.out.println(result);
         return result;
     }
 

@@ -121,7 +121,8 @@ public class BoardService {
                 });
             }
         }
-
+        System.out.println("-------------");
+        System.out.println(list);
         return list;
     }
 

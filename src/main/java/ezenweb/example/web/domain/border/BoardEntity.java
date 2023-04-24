@@ -70,7 +70,7 @@ public class BoardEntity extends BaseTime {
                         //만약 작성 날짜/시간중 날짜가 현재 날짜와 동일하다면
                         this.cdate.toLocalDate().toString().equals(LocalDateTime.now().toLocalDate().toString()) ?
                         this.cdate.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")) :
-                        this.cdate.toLocalDate().format(DateTimeFormatter.ofPattern("yy-MM-DD") )
+                        this.cdate.toLocalDate().format(DateTimeFormatter.ofPattern("yy-MM-dd") )
                 )
                 .build();
     }
