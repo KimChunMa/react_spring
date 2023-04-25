@@ -110,7 +110,7 @@ public class BoardService {
         Pageable pageable = PageRequest.of(
                 page-1,3, Sort.by(Sort.Direction.DESC, "bno") ) ;
         //PageRequest.of(페이지번호, 페이지당 표시 개수 Sort.by (Sort.Direction.ASC/DESC, "정렬기준 필드명"))
-        Page<BoardEntity> entityPage = boardEntityRepository.findAll(pageable);
+        Page<BoardEntity> entityPage = boardEntityRepository.findBySearch(cno,pageable);
 
         List<BoardDto> list = new ArrayList<>();
         entityPage.forEach( (b)-> {
