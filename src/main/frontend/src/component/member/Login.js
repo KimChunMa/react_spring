@@ -10,11 +10,11 @@ export default function Login(props){
 
         axios.post("http://localhost:8080/member/login", loginFormData)
         .then(r => {
+            console.log(r);
             if(r.data == false){
                 alert('실패')
             }else{
                 alert('성공')
-                console.log(r)
                 // 브라우저 닫혀도 사라지지않지만 도메인이 달라지면 사라짐
                 // 로컬 스토리지에 로그인 성공한 흔적 남기기
                 //localStorage.setItem("key",value); // String 타입
@@ -24,7 +24,7 @@ export default function Login(props){
                 sessionStorage.setItem("login_token" , JSON.stringify( r.data ) );
                 //window.localStorage.removeItem("login_token");
 
-                window.location.href="/";
+                //window.location.href="/";
             }
          })
     }

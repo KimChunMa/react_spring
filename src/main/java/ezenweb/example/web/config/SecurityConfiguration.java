@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //super.configure(http); 생성자
         http
-                //권한에 따른 HTTP GET 요청 제한
+     /*           //권한에 따른 HTTP GET 요청 제한
                 .authorizeHttpRequests() // HTTP 인증 요청
                     .antMatchers("/member/info/mypage") // 인증시에만 사용할 URL
                     .hasRole("user") // 위 URL 패턴에 요청할수 있는 권한명
@@ -49,10 +49,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                  //   .hasRole("user")
                 .antMatchers("/**") // localhost:8080 ~ 이하 페이지는 권한 해제
                     .permitAll()//권한 해제
-
+*/
 
                     // 토큰 (ROLE_user) : ROLE_ 제외한 권한명 작성
-                .and()
+       /*         .and()*/
+/*
                     .csrf() //사이트 간 요청 위조 [post,put http 사용 불가]
                         .ignoringAntMatchers("/member/info") //특정 매핑 URL 허용
                         .ignoringAntMatchers("/member/login")
@@ -65,8 +66,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .ignoringAntMatchers("/board/b_del")
                         .ignoringAntMatchers("/todo")
 
+*/
 
-                .and() // 기능 추가/구분 할때 사용되는 메소드
+                //.and() // 기능 추가/구분 할때 사용되는 메소드
                     .formLogin()
                         .loginPage("/member/login") // 로그인페이지로 사용할 URL
                         .loginProcessingUrl("/member/login") //로그인처리할 매핑 URL
@@ -93,9 +95,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .userService(memberService); // oauth2 서비스를 처리할 서비스 구현
 
         http.cors(); // cors 정책 사용
+        http.csrf().disable(); // csrf 사용
     }//configure e
 
     //스프링 시큐리티에 cors 정책 설정 [리액트가 요청 ]
+/*
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -107,6 +111,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**",corsConfiguration);
         return source;
     }
+*/
 
 
 }// class e

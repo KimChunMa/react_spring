@@ -18,18 +18,18 @@ import java.util.Map;
 @RestController // @Controller + @ResponseBody(메소드위에 하나하나 써야됨 )
 @Slf4j
 @RequestMapping("/board")
-@CrossOrigin( origins = "http://localhost:3000")
+//@CrossOrigin( origins = "http://localhost:3000")
 public class BoardController {
 
     @Autowired
     private BoardService boardService;
 
     // -------------------------------view 변환 -------------------------
-    @GetMapping("")
+  /*  @GetMapping("")
     public Resource index(){
         return new ClassPathResource("templates/board/list.html");
     }
-
+*/
     // ------------------------------- model 반환 ------------------------
 
     //1. 카테고리 등록

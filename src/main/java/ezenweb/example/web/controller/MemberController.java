@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController // @Controller + @ResponseBody(메소드위에 하나하나 써야됨 )
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/member")
 public class MemberController {
 
     //T서버사이드 라이팅 : 클라이언트가 HTML요청하는 방식 [리액트일경우사용 X ]
     //회원가입창 이동
+/*
     @GetMapping("/signup")
     public Resource getSignup(){
         return new ClassPathResource("templates/member/signup.html");
@@ -26,6 +27,7 @@ public class MemberController {
     //로그인창
     @GetMapping("/login")
     public Resource getLogin(){return new ClassPathResource("templates/member/login.html");}
+*/
 
     //2 있을때 객체[빈] 자동생성
     @Autowired
