@@ -13,8 +13,9 @@ export default function Write( props ) {
             let info = {
                 btitle : document.querySelector("#btitle").value ,
                 bcontent : document.querySelector("#bcontent").value ,
-                cno : 1
+                cno : 2
             }
+
             axios.post('/board', info)
                 .then(r=>{console.log(r); })
     }

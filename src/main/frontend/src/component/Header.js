@@ -32,7 +32,6 @@ export default function Header(props){
     },[])
     console.log(login)
 
-
     return (
     <div>
         <a href="/"> Home </a>

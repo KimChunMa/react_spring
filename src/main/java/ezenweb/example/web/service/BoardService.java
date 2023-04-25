@@ -7,6 +7,10 @@ import ezenweb.example.web.domain.member.MemberDto;
 import ezenweb.example.web.domain.member.MemberEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,6 +58,7 @@ public class BoardService {
     @Transactional
     @PostMapping("/write")
     public byte write(BoardDto boardDto){
+        System.out.println("--------------------------------");
         log.info("s board dto : " + boardDto );
 
         // 1. 선택된 카테고리 번호를 이용한 카테고리 엔티티 찾기
@@ -101,28 +106,23 @@ public class BoardService {
 
     //4. 카테고리별  게시물 출력
     @Transactional
-    public List<BoardDto> list(int cno){
-        log.info("list cno : "+cno);
+    public PageDto list(int cno, int page){
+        Pageable pageable = PageRequest.of(
+                page-1,3, Sort.by(Sort.Direction.DESC, "bno") ) ;
+        //PageRequest.of(페이지번호, 페이지당 표시 개수 Sort.by (Sort.Direction.ASC/DESC, "정렬기준 필드명"))
+        Page<BoardEntity> entityPage = boardEntityRepository.findAll(pageable);
+
         List<BoardDto> list = new ArrayList<>();
-        if(cno == 0){ // 카테고리 정보 전체 출력
-
-
-            List<BoardEntity>  boardEntityList = boardEntityRepository.findAll();
-            boardEntityList.forEach((e)->{
-                list.add(e.toDto());
-            });
-
-        }else{ // 해당 cno의 카테고리 정보 전체 출력
-            Optional<CategoryEntity> categoryEntityOptional = categoryEntityRepository.findById(cno);
-            if(categoryEntityOptional.isPresent()){
-                categoryEntityOptional.get().getBorderEntityList().forEach((e) ->{
-                    list.add(e.toDto());
-                });
-            }
-        }
-        System.out.println("-------------");
-        System.out.println(list);
-        return list;
+        entityPage.forEach( (b)-> {
+            list.add(b.toDto());
+        });
+        log.info("총게시물 수 : " + entityPage.getTotalElements());
+        log.info("총게시물 수 : " + entityPage.getTotalPages());
+        return PageDto.builder()
+                .boardDtoList(list)
+                .totalCount(entityPage.getTotalElements())
+                .totalPage(entityPage.getTotalPages())
+                .cno(cno).page(page).build();
     }
 
     //5. 내가 쓴 게시물 출력

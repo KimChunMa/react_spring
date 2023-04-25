@@ -3,6 +3,7 @@ package ezenweb.example.web.controller;
 import ezenweb.example.web.domain.border.BoardDto;
 import ezenweb.example.web.domain.border.BoardEntity;
 import ezenweb.example.web.domain.border.CategoryDto;
+import ezenweb.example.web.domain.border.PageDto;
 import ezenweb.example.web.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.apache.bcel.classfile.ClassParser;
@@ -58,10 +59,9 @@ public class BoardController {
 
     //4. 카테고리별 게시물 출력
     @GetMapping("")
-    public List<BoardDto> list(@RequestParam int cno){
-        log.info("list cno : "+cno);
-        List<BoardDto> result = boardService.list(cno);
-        return result;
+    public PageDto list(@RequestParam int cno, @RequestParam int page){
+        log.info("list cno : "+cno + " " + page);
+        return boardService.list(cno,page);
     }
 
     //수정

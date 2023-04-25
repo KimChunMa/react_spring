@@ -11,34 +11,50 @@ import Paper from '@mui/material/Paper';
 /* ---------------------------*/
 import Container from '@mui/material/Container';
 import CategoryList from './CategoryList'
+/* ---------------- 페이지 ---------------------*/
+import Pagination from '@mui/material/Pagination';
 
 export default function List(props){
 
       // 1. 요청한 게시물 정보를 가지고 있는 리스트 변수[ 상태 관리변수 ]
       let [ rows , setRows ] = useState( [] )
-      //1-2. 카테고리
-      let [cno,setCno] = useState(0)
+      //1-2. 카테고리+ 페이지수
+      let [ pageInfo , setPageInfo ] = useState( { 'cno' : 0 , 'page' : 1 } )
+      // 총페이지
+      let [ totalPage, setTotalPage] = useState(1);
+      //총 게시물
+      let [ totalCount, setTotalCount ] = useState(1);
+
 
       // 2. 서버에게 요청하기 [ 컴포넌트가 처음 생성 되었을때 ] // useEffect( ()=>{} , [] )
       useEffect( ()=>{
-          axios.get('/board',{ params : { cno : cno } })
-              .then( r => {  setRows( r.data ) } )
+          axios.get('/board',{ params : pageInfo })
+              .then( r => {   console.log(r);
+              setRows( r.data.boardDtoList ); //응답받은 게시물
+              setTotalPage(r.data.totalPage); //페이지
+              setTotalCount(r.data.totalCount)  //카운트
+              })
               .catch( err => { console.log(err); })
-      } , [cno] ) // cno 변경 될때마다 해당 useEffect 실행된다.
+      } , [pageInfo] ) // cno 변경 될때마다 해당 useEffect 실행된다.
 
       // useEffect ( ()=> {} ) : 생성, 업데이트
       // useEffect ( ()=> {},[] ) : 생성될때 1번
       // useEffect ( ()=> {}, [변수] ) : 생성, 업데이트 될때마다 새렌더링
 
     //3. 카테고리 변경
-    const categoryChange = (cno) => {
-        alert('List 컴포넌트에서 이벤트 발생 : ' + cno)
-        setCno(cno);
-    }
+    const categoryChange = (cno) => { pageInfo.cno = cno ; setPageInfo({...pageInfo});}
+    // [...배열명] vs {...객체명} : 기존 배열 / 객체의 새로운 메모리 할당
+
+    //4. 페이징에서 선택된 번호
+      const selectPage = (e) =>{
+          console.log( e.target.outerText ); // 해당 button 에서 밖으로 출력되는 text 호출
+             pageInfo.page = e.target.outerText;
+             setPageInfo( {...pageInfo } )
+      }
 
     return (
-
       <Container>
+        <div> 현재 페이지 : { pageInfo.page } 총 게시물 : {totalCount}</div>
         <div style={{display:'flex' , justifyContent:'space-between' , alignItems:'center' }}>
             <a href="/board/write"> 글쓰기 </a>
             <CategoryList categoryChange={categoryChange}/>
@@ -67,6 +83,12 @@ export default function List(props){
               </TableBody>
             </Table>
           </TableContainer>
+
+          <div style={{ display:'flex' ,justifyContent : 'center' , margin: '40px 0px' }}>
+            {/* 전체페이지수 필요*/}
+            <Pagination count={totalPage} color="primary" onClick={selectPage}/>
+          </div>
+
       </Container>
       );
 }
