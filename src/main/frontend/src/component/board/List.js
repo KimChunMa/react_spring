@@ -21,7 +21,7 @@ export default function List(props){
 
       // 2. 서버에게 요청하기 [ 컴포넌트가 처음 생성 되었을때 ] // useEffect( ()=>{} , [] )
       useEffect( ()=>{
-          axios.get('http://localhost:8080/board/list',{ params : { cno : cno } })
+          axios.get('/board',{ params : { cno : cno } })
               .then( r => {  setRows( r.data ) } )
               .catch( err => { console.log(err); })
       } , [cno] ) // cno 변경 될때마다 해당 useEffect 실행된다.

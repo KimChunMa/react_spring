@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController // @Controller + @ResponseBody(메소드위에 하나하나 써야됨 )
 @Slf4j
 @RequestMapping("/board")
-//@CrossOrigin( origins = "http://localhost:3000")
+@CrossOrigin( origins = "http://localhost:3000")
 public class BoardController {
 
     @Autowired
@@ -50,19 +50,38 @@ public class BoardController {
 
 
     //3. 게시물 쓰기 //body {"btitle":"제목", "bcontent": "내 용" , "cno":"번호" }
-    @PostMapping("/write") //요청한 json필드명과 dto 필드명 일치시 자동 매핑
+    @PostMapping("") //요청한 json필드명과 dto 필드명 일치시 자동 매핑
     public byte write( @RequestBody BoardDto boardDto ){ log.info("c board dto : " + boardDto );
         byte result = boardService.write( boardDto );
         return result;
     }
 
     //4. 카테고리별 게시물 출력
-    @GetMapping("/list")
+    @GetMapping("")
     public List<BoardDto> list(@RequestParam int cno){
         log.info("list cno : "+cno);
         List<BoardDto> result = boardService.list(cno);
         return result;
     }
+
+    //수정
+    @PutMapping("")
+    public boolean put(){
+        return true;
+    }
+
+    //삭제
+    @DeleteMapping("")
+    public boolean delete( ){
+        return true;
+    }
+
+    //개별 출력
+    @GetMapping("/getboard")
+    public BoardDto getboard ( int bno){
+        return null;
+    }
+
 
 
     //3. 내가 쓴 게시물 출력

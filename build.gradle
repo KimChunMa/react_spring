@@ -41,24 +41,19 @@ tasks.named('test') {
 }
 
 //------------------------------------------------------------------
-
 /* 스프링부트 빌드시 리액트도 같이 빌드  */
 def frontendDir = "$projectDir/src/main/frontend" // 리액트 프로젝트 폴더 경로
-// $는 형재프로젝트, "$projectDir/src/main/{리액트 프로젝트 명}"
 
-sourceSets { // 리액트 실행후 빌드된 파일을 적재할 경로 설정
+sourceSets {
     main {
-        // 해당경로가 스프링이 view 매핑하는 기본경로 이기 떄문
         resources { srcDirs = ["$projectDir/src/main/resources"]
         }
     }
 }
 
-//빌드된 리액트 파일을 복사해서 위에서 설정한 경로에 저장
 processResources { dependsOn "copyReactBuildFiles" }
 
-//리액트 npm 설치
-task installReact(type: Exec) { // 리액트[npm] 없으면 자동 설치, 있으면 업데이트
+task installReact(type: Exec) {
     workingDir "$frontendDir"
     inputs.dir "$frontendDir"
     group = BasePlugin.BUILD_GROUP
@@ -70,7 +65,7 @@ task installReact(type: Exec) { // 리액트[npm] 없으면 자동 설치, 있�
     }
 }
 
-task buildReact(type: Exec) { // 리액트 빌드[실행] npm start
+task buildReact(type: Exec) {
     dependsOn "installReact"
     workingDir "$frontendDir"
     inputs.dir "$frontendDir"
@@ -82,7 +77,8 @@ task buildReact(type: Exec) { // 리액트 빌드[실행] npm start
     }
 }
 
-task copyReactBuildFiles(type: Copy) { //리액트 빌드후 파일을 스프링[resoures]
+task copyReactBuildFiles(type: Copy) { // spring jsx[리액트파일] 인식불가 => 1. 우선 리액트 실행
+    dependsOn "buildReact"
     from "$frontendDir/build"
     into "$projectDir/src/main/resources/static"
 }

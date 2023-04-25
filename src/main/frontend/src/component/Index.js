@@ -26,8 +26,8 @@
         <Header/>
         <Routes>
             <Route path="/" element = { <Main/> } />
-            <Route path="login" element = { <Login/> } />
-            <Route path="signup" element = { <Signup/> } />
+            <Route path="/logins" element = { <Login/> } />
+            <Route path="/signup" element = { <Signup/> } />
             <Route path="/member/find" element = { <Find/> } />
             <Route path="/member/findPw" element = { <FindPw/> } />
             <Route path="/board/list" element = { <List/> } />
