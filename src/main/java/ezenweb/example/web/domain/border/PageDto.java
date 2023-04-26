@@ -23,4 +23,7 @@ public class PageDto {
     private int page;
     //현재 카테고리 번호
     private int cno;
+
+    private String key;
+    private String keyword;
 }

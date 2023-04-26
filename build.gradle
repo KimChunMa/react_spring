@@ -42,18 +42,18 @@ tasks.named('test') {
 
 //------------------------------------------------------------------
 /* 스프링부트 빌드시 리액트도 같이 빌드  */
-def frontendDir = "$projectDir/src/main/frontend" // 리액트 프로젝트 폴더 경로
+def frontendDir = "$projectDir/src/main/frontend" // 리액트 프로젝트 폴더 경로 (ex frontend)
 
-sourceSets {
+sourceSets { // 리액트 빌드후 빌드된 파일을 저장할 경로 설정
     main {
         resources { srcDirs = ["$projectDir/src/main/resources"]
         }
     }
 }
-
+// 빌드된 리액트 파일을 복사해서 위에서 설정한 경로에 저장
 processResources { dependsOn "copyReactBuildFiles" }
 
-task installReact(type: Exec) {
+task installReact(type: Exec) {  // 리액트[ npm ] 없으면 자동 설치 있으면 업데이트
     workingDir "$frontendDir"
     inputs.dir "$frontendDir"
     group = BasePlugin.BUILD_GROUP

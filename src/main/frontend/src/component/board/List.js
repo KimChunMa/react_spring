@@ -19,7 +19,7 @@ export default function List(props){
       // 1. 요청한 게시물 정보를 가지고 있는 리스트 변수[ 상태 관리변수 ]
       let [ rows , setRows ] = useState( [] )
       //1-2. 카테고리+ 페이지수
-      let [ pageInfo , setPageInfo ] = useState( { 'cno' : 0 , 'page' : 1 } )
+      let [ pageInfo , setPageInfo ] = useState( { 'cno' : 0 , 'page' : 1 , 'key' : '' , 'keyword' : '' } )
       console.log(pageInfo)
       // 총페이지
       let [ totalPage, setTotalPage] = useState(1);
@@ -46,12 +46,22 @@ export default function List(props){
     const categoryChange = (cno) => { pageInfo.cno = cno ; setPageInfo({...pageInfo});}
     // [...배열명] vs {...객체명} : 기존 배열 / 객체의 새로운 메모리 할당
 
-    //4. 페이징에서 선택된 번호
-      const selectPage = (e) =>{
-          console.log( e.target.outerText ); // 해당 button 에서 밖으로 출력되는 text 호출
-             pageInfo.page = e.target.outerText;
+    //4. 페이징 변경
+      const selectPage = ( event , value ) =>{
+             console.log(value);
+
+             pageInfo.page = value;
              setPageInfo( {...pageInfo } )
       }
+
+     //5. 검색 했을때
+     const onSearch = () => {
+        pageInfo.key = document.querySelector('.key').value
+        pageInfo.keyword = document.querySelector('.keyword').value
+        pageInfo.page = 1; // 검색시 1페이지로
+        pageInfo.cno = 0;
+        setPageInfo({...pageInfo})
+     }
 
     return (
       <Container>
@@ -87,8 +97,17 @@ export default function List(props){
 
           <div style={{ display:'flex' ,justifyContent : 'center' , margin: '40px 0px' }}>
             {/* 전체페이지수 필요*/}
-            <Pagination count={totalPage} color="primary" onClick={selectPage}/>
+            <Pagination count={totalPage} color="primary" onChange={selectPage} page ={pageInfo.page}/>
           </div>
+
+            <div class="searchBox">
+                <select className="key">
+                    <option value="btitle"> 제목 </option>
+                    <option value="bcontent"> 내용 </option>
+                </select>
+                <input type="text" className="keyword" />
+                <button type="button" onClick={ onSearch } > 검색 </button>
+            </div>
 
       </Container>
       );

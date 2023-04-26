@@ -12,10 +12,13 @@ public interface BoardEntityRepository extends JpaRepository<BoardEntity, Intege
             //ps.setInt(1,cno);
         // [JPA] select * from board where cno = :cno
             //:매개변수명 (해당 함수의 매개변수 이름)
-    @Query(value =  " select * " +
-                    " from border " +
-                    " where if( :cno = 0 , cno like '%%' , cno = :cno ) "
+    @Query(value =  " select *  from border " +
+                    " where " +
+                    " IF( :cno = 0 , cno like '%%' , cno = :cno ) and " +
+                    " IF( :key = '' , true , " +
+                                            "if( :key = 'btitle' , btitle like %:keyword% , bcontent like %:keyword% )  ) "
+                    //if (조건, 참, 거짓 if(조건, 참, 거짓 ))
                     , nativeQuery = true)
-    Page<BoardEntity> findBySearch(int cno, Pageable pageable);
+    Page<BoardEntity> findBySearch(int cno, String key , String keyword ,Pageable pageable);
 
 }
