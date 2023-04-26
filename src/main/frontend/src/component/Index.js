@@ -10,6 +10,7 @@
  import List from "./board/List"
  import DashBoard from "./admin/DashBoard"
  import Write from "./board/write"
+  import AppTodo from "./admin/homework/AppTodo"
 
 /*
     react-router-dom 다양한 라우터 컴포넌트 제공
@@ -33,6 +34,7 @@
             <Route path="/board/list" element = { <List/> } />
             <Route path="/admin/dashBoard" element = { <DashBoard/> } />
             <Route path="/board/write" element = { <Write/> } />
+            <Route path="/admin/homework" element = { <AppTodo/> } />
 
         </Routes>
         <Footer/>

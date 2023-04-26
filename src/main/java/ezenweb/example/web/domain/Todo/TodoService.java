@@ -1,7 +1,12 @@
 package ezenweb.example.web.domain.Todo;
 
 import ezenweb.example.Day04.domain.entity.product.ProductEntity;
+import ezenweb.example.web.domain.border.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,17 +26,25 @@ public class TodoService {
 
     //1.게시판 출력
     @Transactional
-    public  List<TodoDto> get(){
-        List<TodoEntity> list = new ArrayList<>();
+    public TodoPageDto get(int page){
+        System.out.println("-------------");
+        System.out.println("page : " + page);
+        Pageable pageable = PageRequest.of(
+                page-1,5, Sort.by(Sort.Direction.DESC, "id") ) ;
+
+        Page<TodoEntity> todoEntityPage = todoRepository.findAll(pageable);
+
         List<TodoDto> dlist = new ArrayList<>();
 
-        list =  todoRepository.findAll();
-
-        list.forEach( o->{
+        todoEntityPage.forEach( o->{
            dlist.add(o.toDto());
         });
 
-        return dlist;
+        return TodoPageDto.builder()
+                .totalPage(todoEntityPage.getTotalPages())
+                .totalCount(todoEntityPage.getTotalElements())
+                .tododtoList(dlist)
+                .page(page).build();
     }
 
     //2. 등록

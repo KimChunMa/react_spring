@@ -20,6 +20,7 @@ export default function List(props){
       let [ rows , setRows ] = useState( [] )
       //1-2. 카테고리+ 페이지수
       let [ pageInfo , setPageInfo ] = useState( { 'cno' : 0 , 'page' : 1 } )
+      console.log(pageInfo)
       // 총페이지
       let [ totalPage, setTotalPage] = useState(1);
       //총 게시물
