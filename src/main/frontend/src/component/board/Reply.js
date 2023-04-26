@@ -60,8 +60,6 @@ export default function Reply(props){
 
     return (<>
         <h3> 댓글란 </h3>
-
-
         <Container>
             <TextField  id="reply" label="내용"
                          rows={20}  defaultValue="" variant="standard"/>
