@@ -1,9 +1,6 @@
 package ezenweb.example.web.controller;
 
-import ezenweb.example.web.domain.border.BoardDto;
-import ezenweb.example.web.domain.border.BoardEntity;
-import ezenweb.example.web.domain.border.CategoryDto;
-import ezenweb.example.web.domain.border.PageDto;
+import ezenweb.example.web.domain.border.*;
 import ezenweb.example.web.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.apache.bcel.classfile.ClassParser;
@@ -106,6 +103,33 @@ public class BoardController {
         return boardService.b_del(bno);
     }
 
+    //6. 게시물 수정
+    @PutMapping("/b_modify")
+    public boolean b_modify(@RequestBody BoardDto boardDto){
+        System.out.println("---------- 수정 ------- ");
+        System.out.println(boardDto);
+        return boardService.b_modify(boardDto);
+    }
 
+    //7. 댓글 등록
+    @PostMapping("/reply")
+    public boolean post_reply(@RequestBody ReplyDto replyDto){
+        System.out.println("---------- 등록 ----------");
+        System.out.println(replyDto);
+        return boardService.post_reply(replyDto);
+    }
 
+    //8.댓글 출력
+    @GetMapping("/replys")
+    public List<ReplyEntity>  get_reply(int bno){
+        System.out.println("---------- 출력 ----------");
+        System.out.println(bno);
+        return boardService.get_reply(bno);
+    }
+
+    //9. 댓글 삭제
+    @DeleteMapping("/reply")
+    public  boolean del_reply(int rno){
+        return boardService.del_reply(rno);
+    }
 }

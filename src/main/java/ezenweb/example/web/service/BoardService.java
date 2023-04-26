@@ -5,6 +5,7 @@ import ezenweb.example.web.domain.MemberEntityRepository;
 import ezenweb.example.web.domain.border.*;
 import ezenweb.example.web.domain.member.MemberDto;
 import ezenweb.example.web.domain.member.MemberEntity;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -27,6 +29,8 @@ public class BoardService {
     private BoardEntityRepository boardEntityRepository;
     @Autowired
     private MemberEntityRepository memberEntityRepository;
+    @Autowired
+    private ReplyRepository replyRepository;
 
     //1. 카테고리 등록
     @Transactional
@@ -125,6 +129,7 @@ public class BoardService {
     }
 
     //5. 내가 쓴 게시물 출력
+    @Transactional
     public List<BoardDto> myboards(){
         //1. 로그인 인증 세션 [object] => dto 형변환
        MemberDto memberDto = (MemberDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -141,9 +146,14 @@ public class BoardService {
 
     /*------------------------- 과제 ---------------------------------*/
     //6. 게시물 상세 출력
+    @Transactional
     public BoardDto s_board(int bno){
+
         BoardEntity boardEntity = boardEntityRepository.findById(bno).get();
 
+        System.out.println("-------------- 게시물 상세 출력 ------------------");
+        System.out.println(bno);
+        System.out.println(boardEntity.toDto());
         if(boardEntity!=null){
             return boardEntity.toDto();
         }
@@ -151,7 +161,9 @@ public class BoardService {
     }
 
     //7. 게시물 삭제하기
+    @Transactional
     public boolean b_del(int bno){
+        //시큐리티에서 인증된 회원 정보 가져오기
         MemberDto memberDto =
                 (MemberDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -163,4 +175,61 @@ public class BoardService {
         }
         return false;
     }
+
+    //8. 게시물 수정하기
+    @Transactional
+    public boolean b_modify(BoardDto boardDto){
+       BoardEntity boardEntity =  boardEntityRepository.findById(boardDto.getBno()).get();
+       boardEntity.setBtitle(boardDto.getBtitle());
+       boardEntity.setBcontent(boardDto.getBcontent());
+       return true;
+    }
+
+    //9. 댓글 입력하기
+    @Transactional
+    public boolean post_reply(ReplyDto replyDto) {
+        Optional<BoardEntity> boardEntity
+                = boardEntityRepository.findById(replyDto.getBno());
+        //현재 게시판 있다면
+        if (boardEntity.isPresent()) {
+
+            MemberEntity memberEntity = memberEntityRepository.findById(replyDto.getMno()).get();
+
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date now = new Date();
+            String date = sdf1.format(now);
+
+            replyRepository.save(
+                    ReplyEntity.builder()
+                            .rcontent(replyDto.getRcontent())
+                            .memberEntity(memberEntity)
+                            .rdate(date)
+                            .boardEntity(boardEntity.get())
+                            .build()
+            );
+            return true;
+        }
+        return false;
+    }
+
+    //10 댓글 출력하기
+    @Transactional
+    public List<ReplyEntity> get_reply(int bno){
+        System.out.println("------- 출력 --------");
+        System.out.println(bno);
+        List<ReplyEntity> list
+                = replyRepository.findAllBno(bno);
+        return list;
+    }
+
+    //11 댓글 삭제하기
+    @Transactional
+    public  boolean del_reply(int rno){
+
+        ReplyEntity replyEntity
+                = replyRepository.findById(rno).get();
+        replyRepository.delete(replyEntity);
+        return true;
+    }
+
 }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Builder@Data
 @NoArgsConstructor@AllArgsConstructor
-@Entity@Table(name="reply")
+@Entity@Table(name="Reply")
 public class ReplyEntity {
 
     @Id
@@ -34,5 +34,14 @@ public class ReplyEntity {
     @JoinColumn(name="bno") // pk필드명
     @ToString.Exclude // 해당필드는  @ToString을 안쓰겠다. [양뱡향]
     private BoardEntity boardEntity;
+
+    public ReplyDto toDto() {
+        return ReplyDto.builder()
+                .rno(this.rno)
+                .rcontent(this.rcontent)
+                .rdate(this.rdate)
+                .rindex(this.rindex)
+                .build();
+    }
 
 }

@@ -14,6 +14,8 @@ import CategoryList from './CategoryList'
 /* ---------------- 페이지 ---------------------*/
 import Pagination from '@mui/material/Pagination';
 
+import View from './View';
+
 export default function List(props){
 
       // 1. 요청한 게시물 정보를 가지고 있는 리스트 변수[ 상태 관리변수 ]
@@ -85,7 +87,7 @@ export default function List(props){
                 {rows.map((row) => (
                   <TableRow  key={row.name}   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}  >
                     <TableCell component="th" scope="row"> {row.bno} </TableCell>
-                    <TableCell align="left">{row.btitle}</TableCell>
+                    <TableCell align="left"><a href={'/board/view/'+row.bno}>{row.btitle}</a></TableCell>
                     <TableCell align="center">{row.memail}</TableCell>
                     <TableCell align="center">{row.bdate}</TableCell>
                     <TableCell align="center">{row.bview}</TableCell>

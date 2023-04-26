@@ -83,6 +83,7 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
         memberDto.set소셜회원정보(oAuth2User.getAttributes());
         memberDto.setMemail(email);
         memberDto.setMname(name);
+
             Set<GrantedAuthority> 권한목록 = new HashSet<>();
             SimpleGrantedAuthority 권한 = new SimpleGrantedAuthority("ROLE_user");
             권한목록.add(권한);
@@ -97,7 +98,8 @@ public class MemberService implements UserDetailsService , OAuth2UserService<OAu
             }else{//두번쨰 이상 수정처리
                 entity.setMname(name);
             }
-        return memberDto;
+            memberDto.setMno(entity.getMno()); // 생성된, 검색된 엔티티 회원번호
+            return memberDto;
     }
 
     @Autowired //저장소
