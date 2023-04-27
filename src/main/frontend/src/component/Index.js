@@ -13,6 +13,7 @@
  import AppTodo from "./admin/homework/AppTodo"
  import View from './board/View';
  import Modify from './board/Modify';
+ import Update from './board/Update';
 
 /*
     react-router-dom 다양한 라우터 컴포넌트 제공
@@ -38,6 +39,7 @@
 
             <Route path="/board/write" element = { <Write/> } />
             <Route path="/board/view/:bno" element = { <View/> } />
+            <Route path="/board/Update" element = { <Update/> } />
             <Route path="/board/modify" element = { <Modify/> } />
 
 

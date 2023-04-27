@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Data@Builder
 @NoArgsConstructor @AllArgsConstructor
@@ -21,6 +24,8 @@ public class BoardDto {
         private String memail;
         private int bview;
         private String bdate;
+
+        List<ReplyDto> replyDtoList = new ArrayList<>();
 
         //Entity 변환 메소드
         // 1. toSaveCategoryEntity

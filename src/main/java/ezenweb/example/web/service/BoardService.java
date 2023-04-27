@@ -149,13 +149,16 @@ public class BoardService {
     @Transactional
     public BoardDto s_board(int bno){
 
-        BoardEntity boardEntity = boardEntityRepository.findById(bno).get();
-
-        System.out.println("-------------- 게시물 상세 출력 ------------------");
-        System.out.println(bno);
-        System.out.println(boardEntity.toDto());
-        if(boardEntity!=null){
-            return boardEntity.toDto();
+        Optional<BoardEntity> optionalBoardEntity = boardEntityRepository.findById( bno );
+        if( optionalBoardEntity.isPresent() ){  // 게시물 출력시 현재 게시물의 댓글도 같이~~ 출력
+            BoardEntity boardEntity = optionalBoardEntity.get();
+            List<ReplyDto> list = new ArrayList<>();
+            boardEntity.getReplyEntities().forEach( ( r)->{  // 댓글 같이~~ 형변환 [ toDto vs 서비스 ]
+                list.add( r.toDto() );
+            });
+            BoardDto boardDto = boardEntity.toDto();
+            boardDto.setReplyDtoList( list );
+            return boardDto;
         }
         return null;
     }
@@ -188,48 +191,98 @@ public class BoardService {
     //9. 댓글 입력하기
     @Transactional
     public boolean post_reply(ReplyDto replyDto) {
-        Optional<BoardEntity> boardEntity
-                = boardEntityRepository.findById(replyDto.getBno());
-        //현재 게시판 있다면
-        if (boardEntity.isPresent()) {
+        System.out.println("-------------- 입력 --------");
+        System.out.println(replyDto);
 
-            MemberEntity memberEntity = memberEntityRepository.findById(replyDto.getMno()).get();
+        //0. 로그인 했는지
+        Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(o.equals("anonymousUser")){return false;}
+        MemberDto memberDto = (MemberDto)o;
+        MemberEntity memberEntity = memberEntityRepository.findById(memberDto.getMno()).get();
 
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date now = new Date();
-            String date = sdf1.format(now);
+        // 0. 댓글작성할 게시물 호출
+        Optional<BoardEntity> optionalBoardEntity = boardEntityRepository.findById( replyDto.getBno() );
+        if( !optionalBoardEntity.isPresent() ){ return false; }
+        BoardEntity boardEntity = optionalBoardEntity.get();
 
-            replyRepository.save(
-                    ReplyEntity.builder()
-                            .rcontent(replyDto.getRcontent())
-                            .memberEntity(memberEntity)
-                            .rdate(date)
-                            .boardEntity(boardEntity.get())
-                            .build()
-            );
-            return true;
-        }
-        return false;
+        // 1. 댓글 작성한다.
+        ReplyEntity replyEntity = replyRepository.save( replyDto.toEntity() );
+        if( replyEntity.getRno() < 1 ) { return  false; }
+
+        // 2. 댓글과 회원의 양방향 관계[ 댓글->회원 / 회원 -> 댓글 == 양방향  ,  댓글->회원 == 단방향  ]
+        replyEntity.setMemberEntity(  memberEntity );
+        memberEntity.getReplyEntityList().add( replyEntity );
+        // 3. 댓글과 게시물의 양방향 관계 [ 댓글->게시물 / 게시물->댓글 == 양방향 , 댓글->게시물 == 단방향 ]
+        replyEntity.setBoardEntity( boardEntity );
+        boardEntity.getReplyEntities().add(replyEntity);
+
+        return true;
     }
 
     //10 댓글 출력하기
     @Transactional
-    public List<ReplyEntity> get_reply(int bno){
-        System.out.println("------- 출력 --------");
-        System.out.println(bno);
-        List<ReplyEntity> list
-                = replyRepository.findAllBno(bno);
-        return list;
+    public  List<ReplyDto> get_reply(int bno){
+
+        return null;
     }
 
     //11 댓글 삭제하기
     @Transactional
     public  boolean del_reply(int rno){
 
+        //0. 로그인 했는지
+        Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(o.equals("anonymousUser")){return false;}
+        MemberDto memberDto = (MemberDto)o;
+        MemberEntity memberEntity = memberEntityRepository.findById(memberDto.getMno()).get();
+
         ReplyEntity replyEntity
                 = replyRepository.findById(rno).get();
+
+        if(memberEntity.getMno() == replyEntity.getMemberEntity().getMno() ) {
+            replyRepository.delete(replyEntity);
+            return true;
+        }
+
         replyRepository.delete(replyEntity);
-        return true;
+        return false;
+    }
+
+    //12 댓글 수정
+    @Transactional
+    public boolean putReply(ReplyDto replyDto){
+
+        //0. 로그인 했는지
+        Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(o.equals("anonymousUser")){return false;}
+        MemberDto memberDto = (MemberDto)o;
+        MemberEntity memberEntity = memberEntityRepository.findById(memberDto.getMno()).get();
+
+        Optional<ReplyEntity> optionalReplyEntity
+                =replyRepository.findById(replyDto.getRno());
+
+        //게시판이있다면
+        if(optionalReplyEntity.isPresent()) {
+
+            ReplyEntity replyEntity = optionalReplyEntity.get();
+
+            //작성가자 맞는지
+            if(memberEntity.getMno() == ( replyEntity.getMemberEntity().getMno() ) ){
+                replyEntity.setRcontent(replyDto.getRcontent());
+                return true;
+            }
+
+            return true;
+        }
+
+
+
+
+
+
+
+
+        return false;
     }
 
 }

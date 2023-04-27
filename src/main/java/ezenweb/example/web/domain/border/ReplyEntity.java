@@ -1,5 +1,6 @@
 package ezenweb.example.web.domain.border;
 
+import ezenweb.example.web.domain.BaseTime;
 import ezenweb.example.web.domain.member.MemberEntity;
 import lombok.*;
 
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @Builder@Data
 @NoArgsConstructor@AllArgsConstructor
 @Entity@Table(name="Reply")
-public class ReplyEntity {
+public class ReplyEntity extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +17,6 @@ public class ReplyEntity {
 
     @Column
     private String rcontent;
-
-    @Column
-    private String rdate; 
 
     @Column
     private int rindex;
@@ -35,12 +33,13 @@ public class ReplyEntity {
     @ToString.Exclude // 해당필드는  @ToString을 안쓰겠다. [양뱡향]
     private BoardEntity boardEntity;
 
-    public ReplyDto toDto() {
+    public ReplyDto toDto(){
         return ReplyDto.builder()
-                .rno(this.rno)
-                .rcontent(this.rcontent)
-                .rdate(this.rdate)
+                .bno(this.boardEntity.getBno())
+                .rno( this.rno ).rcontent( this.rcontent )
                 .rindex(this.rindex)
+                .rdate( this.cdate.toLocalDate().toString() )
+                // cdate[ LocalDateTime ] <--> rdate[ String ]
                 .build();
     }
 

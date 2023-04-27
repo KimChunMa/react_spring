@@ -14,7 +14,7 @@ export default function Modify(props){
     //카테고리 선택
     let [cno, setCno] = useState(0)
 
-    //게시판 상세 정보 불러오기
+    //URL 가져오기
     const [ searchParams , setSearchParams ] = useSearchParams();
 
     //게시판 상세 정보 불러오기
@@ -28,8 +28,6 @@ export default function Modify(props){
 
     //수정 버튼
     const onModify = () => {
-         console.log(board.btitle +" " +
-         board.bcontent +  " " +  board.cno + " " +  board.bno )
 
        let m_board = {
         btitle: board.btitle ,

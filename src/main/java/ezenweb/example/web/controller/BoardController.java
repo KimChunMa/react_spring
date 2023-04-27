@@ -63,26 +63,6 @@ public class BoardController {
         return boardService.list(pageDto);
     }
 
-    //수정
-    @PutMapping("")
-    public boolean put(){
-        return true;
-    }
-
-    //삭제
-    @DeleteMapping("")
-    public boolean delete( ){
-        return true;
-    }
-
-    //개별 출력
-    @GetMapping("/getboard")
-    public BoardDto getboard ( int bno){
-        return null;
-    }
-
-
-
     //3. 내가 쓴 게시물 출력
     @GetMapping("/myboards")
     public List<BoardDto> myboards(){
@@ -114,16 +94,15 @@ public class BoardController {
     //7. 댓글 등록
     @PostMapping("/reply")
     public boolean post_reply(@RequestBody ReplyDto replyDto){
-        System.out.println("---------- 등록 ----------");
+        System.out.println("---------- Con 등록 ----------");
         System.out.println(replyDto);
         return boardService.post_reply(replyDto);
     }
 
     //8.댓글 출력
-    @GetMapping("/replys")
-    public List<ReplyEntity>  get_reply(int bno){
-        System.out.println("---------- 출력 ----------");
-        System.out.println(bno);
+    @GetMapping("/reply")
+    public  List<ReplyDto>  get_reply(@RequestParam int bno){
+
         return boardService.get_reply(bno);
     }
 
@@ -131,5 +110,13 @@ public class BoardController {
     @DeleteMapping("/reply")
     public  boolean del_reply(int rno){
         return boardService.del_reply(rno);
+    }
+
+    //10. 댓글 수정
+    @PutMapping("/reply")
+    public boolean putReply(@RequestBody ReplyDto replyDto){
+        System.out.println("-------------- dto ----------");
+        System.out.println(replyDto);
+        return boardService.putReply(replyDto);
     }
 }

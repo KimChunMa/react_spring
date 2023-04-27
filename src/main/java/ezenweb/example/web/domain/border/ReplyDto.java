@@ -12,13 +12,16 @@ import javax.persistence.*;
 
 public class ReplyDto {
     private int rno;
-
     private String rcontent;
-
     private String rdate;
-
-    private int rindex;
-
     private int bno;
-    private int mno;
+
+    private  int rindex;
+
+    // 저장용
+    public ReplyEntity toEntity(){
+        return ReplyEntity.builder()
+                .rcontent( this.rcontent )
+                .build();
+    }
 }
