@@ -21,11 +21,10 @@ export default function Reply(props){
     let [replyList, setReplyList] = useState([]);
     //props의 대댓글이 변경되었을때 [axios가 실행될때]
     useEffect( () => { setReplyList( props.replyDtoList ) } , [props.replyDtoList] )
-
     //댓글 삭제
     const onDel = (e,rno) => { props.onDel(rno); }
 
-    // 3. 답글 핸들러
+  // 3. 답글 핸들러
     const onRereplyHandler= ( e , rno ) => {
           console.log( '답글' + rno );
 
@@ -39,32 +38,33 @@ export default function Reply(props){
                              <ReplyInput onReply = { props.onReply }  rindex = { rno } />
                                 { /* 답글 출력 */ }
                                 {
-                                    r.rereplyDtolist.map( (rr,j)=> {
+                                    r.rereplyDtolist.map( ( rr , j )=> {
+                                       if( rr.readOnly == undefined ){ rr.readOnly = true ; }
+                                       return(
+                                           <div className="rereplyBox">
+                                               <span className="replyMname"> { rr.mname } </span>
+                                               <span className="replyRdate"> { rr.rdate } </span>
+                                               { /* [과제] 답글 수정 오류 */}
+                                               <input  value={ rr.rcontent }  className="replyRcontent" onChange={ (e)=> onRcontentChange( e , rr.rno , i , j ) }  readOnly = { rr.readOnly }   />
+                                               <div class="replyBtn">
 
-                                        if( r.readOnly == undefined ){ r.readOnly = true ; }
-                                            return(
-                                                <div className="replyBox">
-                                                        <span className="replyMname"> { rr.mname } </span>
-                                                        <span className="replyRdate"> { rr.rdate } </span>
-                                                        <input  value={ r.rcontent }  className="replyRcontent"
-                                                        onChange={ (e)=> onRcontentChange( e , rr.rno , i),j }  readOnly = { r.readOnly }   />
-                                                        <div class="replyBtn">
-                                                            {  login != null && login.mno == r.mno
-                                                                ?<>
-                                                               <button onClick={ (e)=>onUpdateHandler( e , r.rno , i ) } >
-                                                               { r.readOnly == true ? '수정' : '수정완료'}
+                                                   {  login != null && login.mno == rr.mno
+                                                       ?<>
+                                                               <button onClick={ (e)=>onUpdateHandler( e , rr.rno , i , j ) } >
+                                                                   { rr.readOnly == true ? '수정' : '수정완료'}
                                                                </button>
-                                                               <button onClick={ (e)=>onDel( e , r.rno ) } >삭제</button>
-                                                               </>
-                                                               :
-                                                               <></>
-                                                               }
-                                                        </div>
-                                                    </div>)
-
+                                                               <button onClick={ (e)=>onDel( e , rr.rno ) } >삭제</button>
+                                                           </>
+                                                       :
+                                                       <></>
+                                                   }
+                                               </div>
+                                           </div>)
                                     })
                                 }
                         </div>
+
+                        console.log(r.cusHTML)
                     }else{ // 해당 답글 구역 숨기기
                          replyList[i].cusHTML = ''
                     }
@@ -75,8 +75,9 @@ export default function Reply(props){
 
 
       // 4. 수정 핸들러
-      const onUpdateHandler = ( e , rno , i,j ) => {
-        console.log(i " + " j)
+      const onUpdateHandler = ( e , rno , i , j ) => {
+          console.log("rno는 "+rno)
+          console.log(i +" 와 "+j)
           // Rcontent 읽기모드 해제
           if( replyList[i].readOnly == true){
               replyList[i].readOnly = false;  alert('수정후 완료 버튼을 눌러주세요');
@@ -95,6 +96,7 @@ export default function Reply(props){
     }
 
     console.log(props)
+    console.log(replyList)
     return (<>
         <ReplyInput  onReply = { props.onReply } rindex={0} />
         <div className="replyCount"> 전체 댓글 : {replyList.length} 개 </div>
@@ -105,7 +107,7 @@ export default function Reply(props){
             if( r.readOnly == undefined ){ r.readOnly = true ; }
             return(
                 <div className="replyBox">
-                    <span className="replyMname"> { r.mname } </span>
+                    <span className="reply Mname"> { r.mname } </span>
                     <span className="replyRdate"> { r.rdate } </span>
                     <input  value={ r.rcontent }  className="replyRcontent"
                     onChange={ (e)=> onRcontentChange( e , r.rno , i) }  readOnly = { r.readOnly }   />
@@ -122,6 +124,7 @@ export default function Reply(props){
                            <></>
                            }
                     </div>
+                     { r.cusHTML } { /* API 없던 필드 */}
                 </div>)
             })
         }
