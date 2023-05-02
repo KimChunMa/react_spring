@@ -152,9 +152,21 @@ public class BoardService {
         Optional<BoardEntity> optionalBoardEntity = boardEntityRepository.findById( bno );
         if( optionalBoardEntity.isPresent() ){  // 게시물 출력시 현재 게시물의 댓글도 같이~~ 출력
             BoardEntity boardEntity = optionalBoardEntity.get();
+
+            //상위댓글
             List<ReplyDto> list = new ArrayList<>();
+
             boardEntity.getReplyEntities().forEach( ( r)->{  // 댓글 같이~~ 형변환 [ toDto vs 서비스 ]
-                list.add( r.toDto() );
+
+                if(r.getRindex() == 0){ // 상위댓글
+                    list.add(r.toDto());
+                    //하위
+                    boardEntity.getReplyEntities().forEach((r2)->{
+                        if(r.getRno() == r2.getRindex()) {
+                            list.get(list.size() - 1).getRereplyDtolist().add(r2.toDto());
+                        }
+                    });
+                }
             });
             BoardDto boardDto = boardEntity.toDto();
             boardDto.setReplyDtoList( list );
@@ -274,14 +286,6 @@ public class BoardService {
 
             return true;
         }
-
-
-
-
-
-
-
-
         return false;
     }
 

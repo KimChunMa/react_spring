@@ -3,7 +3,9 @@ import axios from 'axios';
 import {useParams} from 'react-router-dom'; //HTTP 경로상의 매개변수 호출 해주는 함수
 import Reply from './Reply';
 import Update from './Update';
+import styles from "./board.css"
 
+import Container from '@mui/material/Container';
 
 export default function View(props){
     //http://localhost:8080/board/view/23 --> useParams(); --> {bno:26}
@@ -73,7 +75,19 @@ export default function View(props){
                             <button> <a href={'/board/modify?bno='+board.bno}>수정</a> </button> </div>
                     : <div> </div>
 
-    return( <>
+
+     // 7. 수정 렌더링
+       const onReplyUpdate = ( rno , rcontent ) => {
+           let info = { rno : rno , rcontent : rcontent  }
+           axios.put( '/board/reply' , info )
+               .then( r => {
+                   if( r.data == true ){
+                       alert("댓글 수정 완료"); getBoard();
+                   }else{   alert("본인 댓글만 삭제할수 있습니다. ");  }
+               })
+       }
+
+    return( <Container>
         <div>
             <h3> 제목: {board.btitle} </h3>
 
@@ -82,11 +96,13 @@ export default function View(props){
         </div>
         <div>
             <Reply
-              replyDtoList={board.replyDtoList}
-              onDel={onDel} onUpdate={onUpdate}
-              onReply={ onReply }/>
+              onReplyUpdate={ onReplyUpdate  } //수정
+              replyDtoList={board.replyDtoList} //댓글 리스트
+              onDel={onDel}  // 삭제, 수정
+              onReply={ onReply }   // 댓글쓰기
+              />
         </div>
-    </>)
+    </Container>)
 }
 
 /*

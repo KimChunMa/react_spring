@@ -39,6 +39,8 @@ public class ReplyEntity extends BaseTime {
                 .rno( this.rno ).rcontent( this.rcontent )
                 .rindex(this.rindex)
                 .rdate( this.cdate.toLocalDate().toString() )
+                .mno(this.memberEntity.getMno())
+                .mname(this.memberEntity.getMname())
                 // cdate[ LocalDateTime ] <--> rdate[ String ]
                 .build();
     }

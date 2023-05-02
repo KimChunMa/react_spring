@@ -12,7 +12,7 @@ public interface BoardEntityRepository extends JpaRepository<BoardEntity, Intege
             //ps.setInt(1,cno);
         // [JPA] select * from board where cno = :cno
             //:매개변수명 (해당 함수의 매개변수 이름)
-    @Query(value =  " select *  from border " +
+    @Query(value =  " select *  from board " +
                     " where " +
                     " IF( :cno = 0 , cno like '%%' , cno = :cno ) and " +
                     " IF( :key = '' , true , " +

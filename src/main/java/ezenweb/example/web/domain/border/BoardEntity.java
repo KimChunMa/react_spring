@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="border")
+@Table(name="board")
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @Builder
