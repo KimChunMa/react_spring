@@ -14,6 +14,7 @@
  import View from './board/View';
  import Modify from './board/Modify';
  import Update from './board/Update';
+ import Chatting from './board/Chatting';
 
 /*
     react-router-dom 다양한 라우터 컴포넌트 제공
@@ -44,6 +45,8 @@
 
 
             <Route path="/admin/homework" element = { <AppTodo/> } />
+
+            <Route path="/Chatting/home" element = {< Chatting/> }/>
 
         </Routes>
         <Footer/>
