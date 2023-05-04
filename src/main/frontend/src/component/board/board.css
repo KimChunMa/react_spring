@@ -1,0 +1,72 @@
+.replyBox, .rereplyBox{
+     margin:15px;
+     border-bottom:1px solid #e8e8e8;
+     padding-bottom:10px;
+}
+
+.rereplyBox{
+    left-margin:100px;
+}
+
+.replyMname{margin-right:30px; font-size:12px;}
+.replyRdate{font-size:8px}
+
+.replyRcontent{
+    display:block;
+    border:none;
+    width:100%;
+    outline:none;
+    padding:10px 0px;
+    margin-left:10px;
+    font-size:14px;
+}
+
+.Replybtn button{
+    border:none;
+    margin:10px;
+    margin-right:20px;
+    font-size:12px;
+    padding:0px;
+    cursor:pointer;
+}
+
+.replyCount{
+    margin-top:20px; font-size:12px; font-weight:bold;
+}
+
+
+.rcontent{
+    width: 80%;
+    height: 80px;
+    border-radius: 10px;
+    resize: none;
+    margin-right: 20px;
+    padding: 20px;
+    border: 1px solid #cccccc;
+}
+
+.replywritebtn{
+       cursor: pointer;
+       background-color: skyblue;
+       color: white;
+       border-radius: 4px;
+       padding: 4px;
+       width: 100px;
+       border: none;
+}
+
+.replyInputBox{
+        display: flex;
+}
+
+
+.replywritebtn:hover{
+    background-color:blue;
+}
+
+
+
+
+
+
+
