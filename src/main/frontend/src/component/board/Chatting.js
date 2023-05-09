@@ -17,6 +17,7 @@ export default function Chatting(props){
     let fileForm = useRef(null); // 채팅 입력창 input DOM객체 제어 변수
     let fileInput = useRef(null); // 채팅 입력창 input DOM객체 제어 변수
 
+
     useEffect( () => {
         if(!ws.current){//만약 클라이언트소켓이 접속이 안되어 있을때
              ws.current = new WebSocket("ws://localhost:8080/chat");
@@ -55,17 +56,8 @@ export default function Chatting(props){
 
         // 2. 첨부파일 전송 [ axios 이용한 서버에게 첨부파일 업로드 ]
         if( fileInput.current.value != '' ){ // 첨부파일 존재하면
-            axios.post( "/chat/fileupload" ,  new FormData( fileForm.current ) )
-                    .then( r => {
-                        console.log( r.data)
-                        // 다른 소켓들에게 업로드 결과 전달
-                        let msgBox ={ id : id, msg : msgInput.current.value,
-                            time : new Date().toLocaleTimeString(), type : 'file'  ,
-                            fileInfo : r.data // 업로드 후 응답받은 파일정보
-                        }
-                        ws.current.send( JSON.stringify( msgBox ) );
-                        fileInput.current.value = '';
-                    } );
+             let formData = new FormData( fileForm.current )
+             fileAxios(  formData ) // 파일 전송
         }
     }
 
@@ -75,10 +67,56 @@ export default function Chatting(props){
         document.querySelector('.chatContentBox').scrollHeight;
     },[msgContent])
 
+
+    //6. 파일 전송 axios
+        const fileAxios = (formData)=>{
+              axios.post( "/chat/fileupload" , formData  )
+                .then( r => {
+                    console.log( r.data)
+                    // 다른 소켓들에게 업로드 결과 전달
+                    let msgBox ={ id : id, msg : msgInput.current.value,
+                        time : new Date().toLocaleTimeString(), type : 'file'  ,
+                        fileInfo : r.data // 업로드 후 응답받은 파일정보
+                    }
+                    ws.current.send( JSON.stringify( msgBox ) );
+                    fileInput.current.value = '';
+                } );
+        }
+
     return(<>
             <Container>
                 <h6> 익명 채팅방 </h6>
-                <div className="chatContentBox">
+                <div
+                    className="chatContentBox"
+                    onDragEnter= { (e) => {console.log('엔터');
+                        e.preventDefault(); {/* 상위 이벤트 제거 브라우저의 동일 이벤트 제거*/}
+                    } }
+
+                    onDragOver={ (e) => {console.log('오버');
+                         e.preventDefault(); {/* 상위 이벤트 제거 */}
+                         e.target.style.backgroundColor = '#e8e8e8'
+                    } }
+
+                    onDragLeave={ (e) => {console.log('리브');
+                         e.preventDefault(); {/* 상위 이벤트 제거 */}
+                          e.target.style.backgroundColor = '#ffffff'
+                    } }
+
+                    onDrop={ (e) => {
+                         e.preventDefault(); {/* 상위 이벤트 제거 */}
+                         console.log('드랍');
+                         e.target.style.backgroundColor = '#ffffff'
+                         {/* 드랍된 파일들을 호출 = e.dataTransfer.files */}
+                         let files = e.dataTransfer.files;
+                         for(let i = 0 ; i < files.length ; i++){
+                            if(files[i] != null && files[i] != undefined){ {/*파일존재시*/}
+                                let formData = new FormData()
+                                formData.set('attachFile', files[i])
+                                fileAxios(  formData )
+                            }
+                         }
+                    } }
+                 >
                 {
                     msgContent.map( (m)=>{
                         return(<>
@@ -93,7 +131,8 @@ export default function Chatting(props){
                                         <span>
                                             <span> { m.fileInfo.originalFilename } </span>
                                             <span> { m.fileInfo.sizeKb } </span>
-                                            <span> <a href={"/chat/filedownload?uuidFile=" + m.fileInfo.uuidFile } > 저장 </a> </span>
+                                            <span> <a href={"/chat/filedownload?uuidFile=" + m.fileInfo.uuidFile
+                                            +"&originalFilename="+m.fileInfo.originalFilename } > 저장 </a> </span>
                                         </span>
                                     </>)
                                  }

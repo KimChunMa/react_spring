@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController // @Controller + @ResponseBody(메소드위에 하나하나 써야됨 )
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/member")
 public class MemberController {
 
