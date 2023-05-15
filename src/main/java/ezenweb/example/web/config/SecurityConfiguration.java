@@ -69,8 +69,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 */
 
                 //.and() // 기능 추가/구분 할때 사용되는 메소드
-                    .formLogin()
-                        .loginPage("/member/login") // 로그인페이지로 사용할 URL
+                .authorizeHttpRequests() // 1.인증 [권한]에 따른 http 요청 제한
+                .antMatchers("/admin/**").hasRole("admin")
+                .antMatchers("/board/update").hasAnyRole("user","ADMIN")
+                .antMatchers("/board/delete").hasAnyRole("user","ADMIN")
+                .antMatchers("/board/write").hasAnyRole("user","ADMIN")
+                .antMatchers("/**").permitAll()
+                .and()
+                .formLogin()
+                        .loginPage("/logins") // 로그인페이지로 사용할 URL
                         .loginProcessingUrl("/member/login") //로그인처리할 매핑 URL
                         //.defaultSuccessUrl("/") //로그인 성공시 매핑 url
                         .successHandler(authSucessFailHandler)

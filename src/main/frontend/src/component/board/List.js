@@ -44,8 +44,10 @@ export default function List(props){
       // useEffect ( ()=> {},[] ) : 생성될때 1번
       // useEffect ( ()=> {}, [변수] ) : 생성, 업데이트 될때마다 새렌더링
 
-    //3. 카테고리 변경
-    const categoryChange = (cno) => { pageInfo.cno = cno ; setPageInfo({...pageInfo});}
+    // 3. 카테고리 변경
+    const categoryChange = ( cno ) => {
+        pageInfo.cno = cno; setPageInfo( {...pageInfo} );
+    }
     // [...배열명] vs {...객체명} : 기존 배열 / 객체의 새로운 메모리 할당
 
     //4. 페이징 변경

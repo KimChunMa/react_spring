@@ -22,8 +22,12 @@ import java.util.UUID;
 public class FileService {
 
     //첨부파일 저장할 경로 [1. 배포 전 2.배포 후]
-    String path = "C://java//";
+    //public String path = "C://java//"; //spring서버 로컬드라이브[c] 접근 가능 다운로드 업로드용
+    //Js[react] 로컬드라이브[c] 접근 불가능 -> 리액트ㅡ 서버에 업로드
+    //springboot + react  통합
+    //react build --> spring resources
 
+    public String path = "C:\\Users\\504\\Desktop\\react_spring\\build\\resources\\main\\static\\static\\media\\";
     //파일 전송하기
     public FileDto fileupload( MultipartFile multipartFile){
         System.out.println("--------------------------- ");
@@ -42,8 +46,7 @@ public class FileService {
             //2. 경로 + 파일명 조합해서 file 클래스 생성
             File file = new File(path+fileName);
             //3. 업로드 // multipartFile.transferTo(저장할 file 클래스의 객체)
-            try {
-                multipartFile.transferTo(file);
+            try {multipartFile.transferTo(file);
             }catch(Exception e){log.info("file upload fail : " + e);}
 
             return FileDto.builder()
